@@ -2,6 +2,10 @@
 
 O ProtoPET é uma atividade dedicada ao desenvolvimento prático de aplicações em **Sistemas Embarcados**. Nosso foco é a criação de protótipos funcionais que resolvam problemas reais, promovendo a integração entre teoria e prática.
 
+## ⛮ Setup
+
+Os projetos são desenvolvidos utilizando o ecossistema PlatformIO. Portanto, é recomendado que você tenha a extensão **PlatformIO IDE** no seu **VS Code**.
+
 # PETDrums
 
 Este consiste em um projeto que visa fazer uma bateria eletrônica
