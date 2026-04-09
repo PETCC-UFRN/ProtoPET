@@ -6,6 +6,24 @@ O ProtoPET é uma atividade dedicada ao desenvolvimento prático de aplicações
 
 Os projetos são desenvolvidos utilizando o ecossistema PlatformIO. Portanto, é recomendado que você tenha a extensão **PlatformIO IDE** no seu **VS Code**.
 
+## Como Executar
+
+Os códigos do projetos estão em pastas com seus respectivos nomes. 
+
+Como cada pasta possui seu próprio arquivo ``platformio.ini, siga estes passos:
+
+1. Clone o repositório: 
+
+```
+git clone https://github.com/seu-usuario/PROTOPET.git
+```
+
+2. No VS Code, abra a pasta específica do projeto que deseja trabalhar.
+
+3. Aguarde o PlatformIO carregar as dependências.
+
+4. Na barra inferior: Clique no ícone de ✔ [build] ou de ➔ [upload] para gravar o código no microcontrolador.
+
 # PETDrums
 
 Este consiste em um projeto que visa fazer uma bateria eletrônica
