@@ -1,6 +1,6 @@
 # ProtoPET
 
-bla bla
+O ProtoPET é uma atividade dedicada ao desenvolvimento prático de aplicações em **Sistemas Embarcados**. Nosso foco é a criação de protótipos funcionais que resolvam problemas reais, promovendo a integração entre teoria e prática.
 
 # PETDrums
 
