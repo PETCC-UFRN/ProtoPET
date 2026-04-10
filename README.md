@@ -23,7 +23,7 @@ Como cada pasta possui seu próprio arquivo 'platformio.ini', siga estes passos:
 1. Clone o repositório: 
 
 ```
-git clone https://github.com/seu-usuario/PROTOPET.git
+git clone https://github.com/PETCC-UFRN/ProtoPET.git
 ```
 
 2. No VS Code, abra a pasta específica do projeto que deseja trabalhar.
