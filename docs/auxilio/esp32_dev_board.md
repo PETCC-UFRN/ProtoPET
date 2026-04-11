@@ -3,7 +3,7 @@
 O ESP32 possui diversos pinos que podem assumir diferentes funções.
 
 <p align="center">
-  <img src="https://lastminuteengineers.com/wp-content/uploads/iot/ESP32-Pinout.png" width="600">
+  <img src="../../assets/esp32devboard.png" width="600">
 </p>
 
 ---
