@@ -60,7 +60,7 @@ Comunicação rápida, usada com módulos como o leitor RFID RC522, displays TFT
 | CS/SS  | GPIO 5      | GPIO 15     |
 
 <p align="center">
-  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjlXuJvqtAwyf9vn2HSfCVmaAdnTSd9dpdZxosCYfARnIrXtJAVOvbx-ezD8Ad1yglidZ2qnA3Xrk5DAZ_49xnXcOgk-kY_5YCsRRcIGE0sEmy2ITVReq_vAW5hDIS4YDG1FdD1W5YzAufz/s1600/7.png" width="800">
+  <img src="../../assets/esp-rfid-leds.png" width="800">
 </p>
 
 ---
