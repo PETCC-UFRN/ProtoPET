@@ -1,50 +1,45 @@
-#include <Arduino.h>
+// Código Arduino
+// ==============================================================
+// #include <Arduino.h>
 
-const int sensorPin = A0;
-const int ledPin = 13;
-const int threshold = 50;
+// const int PIEZO_PIN = A0; 
+// const int THRESHOLD = 80; 
 
-// Função mágica que fala a língua do ttymidi e do Hydrogen
-void midiNoteOn(byte channel, byte pitch, byte velocity) {
-  Serial.write(0x90 + channel); // Comando MIDI para "Nota Ligada"
-  Serial.write(pitch);          // Qual instrumento tocar (ex: 36 = Bumbo)
-  Serial.write(velocity);       // Força da batida (0 a 127)
-}
+// void setup() {
+//     Serial.begin(9600);
+//     Serial.println("--- Teste Piezo no Arduino Inicializado ---");
+// }
 
-void midiNoteOff(byte channel, byte pitch, byte velocity) {
-  Serial.write(0x80 + channel); // Comando MIDI para "Nota Desligada"
-  Serial.write(pitch);
-  Serial.write(velocity);
-}
+// void loop() {
+//     int sensorValue = analogRead(PIEZO_PIN);
 
-void setup() {
-  pinMode(ledPin, OUTPUT);
-  // Velocidade super rápida para não ter latência na bateria!
-  Serial.begin(115200); 
-}
+//     if (sensorValue > THRESHOLD) {
+//         Serial.print("Vibracao detectada! Valor: ");
+//         Serial.println(sensorValue);
+        
+//         delay(100); // Debounce básico
+//     }
+// }
+// ==============================================================
 
-void loop() {
-  int leitura = analogRead(sensorPin);
-  
-  if(leitura > threshold){
-    digitalWrite(ledPin, HIGH);
+// Código ESP32(Não funcional ainda)
+// ==============================================================
+// #include <Arduino.h>
 
-    // Converte a força da batida do Arduino (threshold até ~800) 
-    // para o padrão de força do MIDI (1 a 127)
-    int forcaMidi = map(leitura, threshold, 800, 50, 127);
-    forcaMidi = constrain(forcaMidi, 1, 127); // Garante que não passe de 127
+// const int piezoPin = 1; 
+// const int threshold = 0; // Ajuste a sensibilidade aqui
 
-    // Envia a Nota 36 (Que é o som do Kick/Bumbo no Hydrogen)
-    midiNoteOn(0, 36, forcaMidi);
+// void setup() {
+//     Serial.begin(115200);
+//     Serial.println("\n--- ESP32 Piezo Hello World ---");
+// }
 
-    // Espera o som rolar e evita ler o tremor do mesmo toque (debounce)
-    delay(40); 
-    
-    // Desliga a nota
-    midiNoteOff(0, 36, 0);
-  } else {
-    digitalWrite(ledPin, LOW);
-  }
+// void loop() {
+//     int rawValue = analogRead(piezoPin);
 
-  delay(5); // Pequeno respiro para o processador
-}
+//     if (rawValue > threshold) {
+//         Serial.println(rawValue);
+//         delay(100);
+//     }
+// }
+// ==============================================================
