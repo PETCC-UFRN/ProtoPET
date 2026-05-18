@@ -1,8 +1,9 @@
 # Setup
 
-Baixe os pacotes de sistema
+Atualize e baixe os pacotes de sistema
 ```bash
-sudo apt install hydrogen python3-rtmidi
+sudo apt update
+sudo apt install hydrogen libasound2-dev pkg-config cmake python3-rtmidi
 ```
 
 Habilite a comunicação e reinicie
