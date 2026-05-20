@@ -1,45 +1,44 @@
-// Código Arduino
-// ==============================================================
-// #include <Arduino.h>
+#include <Arduino.h>
 
-// const int PIEZO_PIN = A0; 
-// const int THRESHOLD = 80; 
+const int piezoPin = 4;
 
-// void setup() {
-//     Serial.begin(9600);
-//     Serial.println("--- Teste Piezo no Arduino Inicializado ---");
-// }
+const int threshold = 150;
 
-// void loop() {
-//     int sensorValue = analogRead(PIEZO_PIN);
+const int scanTime = 12;         // ms procurando pico
+const int retriggerDelay = 120;  // ms
 
-//     if (sensorValue > THRESHOLD) {
-//         Serial.print("Vibracao detectada! Valor: ");
-//         Serial.println(sensorValue);
-        
-//         delay(100); // Debounce básico
-//     }
-// }
-// ==============================================================
+unsigned long lastHit = 0;
 
-// Código ESP32(Não funcional ainda)
-// ==============================================================
-// #include <Arduino.h>
+void setup() {
+    Serial.begin(115200);
+}
 
-// const int piezoPin = 1; 
-// const int threshold = 0; // Ajuste a sensibilidade aqui
+void loop() {
 
-// void setup() {
-//     Serial.begin(115200);
-//     Serial.println("\n--- ESP32 Piezo Hello World ---");
-// }
+    int value = analogRead(piezoPin);
 
-// void loop() {
-//     int rawValue = analogRead(piezoPin);
+    // detecta início da pancada
+    if (
+        value > threshold &&
+        millis() - lastHit > retriggerDelay
+    ) {
 
-//     if (rawValue > threshold) {
-//         Serial.println(rawValue);
-//         delay(100);
-//     }
-// }
-// ==============================================================
+        int peak = value;
+
+        unsigned long start = millis();
+
+        // procura maior valor
+        while(millis() - start < scanTime) {
+
+            value = analogRead(piezoPin);
+
+            if(value > peak) {
+                peak = value;
+            }
+        }
+
+        lastHit = millis();
+
+        Serial.println(peak);
+    }
+}
