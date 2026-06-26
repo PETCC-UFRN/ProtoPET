@@ -8,13 +8,9 @@ struct DrumPad {
 };
 
 struct __attribute__((packed)) Packet {
-
     uint8_t header;
-
     uint8_t pad;
-
     uint16_t value;
-
     uint32_t timestamp;
 };
 
@@ -49,13 +45,11 @@ void printPad(int pad, int value) {
     Serial.println();
 }
 
-int clampMIDI(int min, int max, int value) {
-    int ceiling = max - min;
-    int diff = max - value;
+uint8_t clampMIDI(int min, int max, int value) {
 
-    double normalized = (diff * 127) / ceiling;
+    value = constrain(value, min, max);
 
-    return 127 - (int)normalized;
+    return map(value, min, max, 1, 127);
 }
 
 void setup() {
@@ -102,8 +96,6 @@ void loop() {
             packet.pad = i;
             packet.value = value;
             packet.timestamp = micros();
-
-            printPad(i, value);
 
             Serial.write(
                 (uint8_t*)&packet,
