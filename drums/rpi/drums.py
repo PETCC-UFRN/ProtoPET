@@ -2,8 +2,8 @@ import serial
 import struct
 import mido
 
-PACKET_SIZE = 8
-PACKET_FORMAT = '>BBHI'
+PACKET_FORMAT = '>BBBI'
+PACKET_SIZE = struct.calcsize(PACKET_FORMAT)
 # UART
 ser = serial.Serial(
     '/dev/ttyACM0',
