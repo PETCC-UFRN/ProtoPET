@@ -2,7 +2,8 @@
 
 struct DrumPad {
     int pin;
-    int threshold;
+    int min;
+    int max;
     unsigned long lastHit;
 };
 
@@ -23,13 +24,15 @@ DrumPad pads[n] = {
 
     {
         2,
-        100,
+        500,
+        900,
         0
     },
 
     {
         4,
-        100,
+        500,
+        900,
         0
     },
 
@@ -37,6 +40,23 @@ DrumPad pads[n] = {
 
 const int scanTime = 12;         // ms procurando pico
 const int retriggerDelay = 120;  // ms
+
+void printPad(int pad, int value) {
+    Serial.print("[");
+    Serial.print(pad);
+    Serial.print("]: ");
+    Serial.print(value);
+    Serial.println();
+}
+
+int clampMIDI(int min, int max, int value) {
+    int ceiling = max - min;
+    int diff = max - value;
+
+    double normalized = (diff * 127) / ceiling;
+
+    return 127 - (int)normalized;
+}
 
 void setup() {
     Serial.begin(115200);
@@ -53,7 +73,7 @@ void loop() {
 
         // detecta início da pancada
         if (
-            value > pads[i].threshold &&
+            value > pads[i].min &&
             millis() - pads[i].lastHit > retriggerDelay
         ) {
 
@@ -75,21 +95,15 @@ void loop() {
             
             pads[i].lastHit = millis();
 
-            // envia:
-            // indice:valor
-            // exemplo:
-            // // 0:3200
-            // Serial.print(i);
-            // Serial.print(":");
-            // Serial.println(peak);
+            int value = clampMIDI(pads[i].min, pads[i].max, peak);
 
             Packet packet;
             packet.header = 0xAA;
             packet.pad = i;
-            packet.value = peak;
+            packet.value = value;
             packet.timestamp = micros();
 
-            
+            printPad(i, value);
 
             Serial.write(
                 (uint8_t*)&packet,
