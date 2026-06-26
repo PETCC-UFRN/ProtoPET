@@ -10,7 +10,7 @@ struct DrumPad {
 struct __attribute__((packed)) Packet {
     uint8_t header;
     uint8_t pad;
-    uint16_t value;
+    uint8_t value;
     uint32_t timestamp;
 };
 
@@ -89,12 +89,10 @@ void loop() {
             
             pads[i].lastHit = millis();
 
-            int value = clampMIDI(pads[i].min, pads[i].max, peak);
-
             Packet packet;
             packet.header = 0xAA;
             packet.pad = i;
-            packet.value = value;
+            packet.value = clampMIDI(pads[i].min, pads[i].max, peak);
             packet.timestamp = micros();
 
             Serial.write(
