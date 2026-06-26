@@ -3,7 +3,7 @@ import struct
 import mido
 
 PACKET_SIZE = 8
-PACKET_FORMAT = '>BBHL'
+PACKET_FORMAT = '>BBHI'
 # UART
 ser = serial.Serial(
     '/dev/ttyACM0',
@@ -26,8 +26,9 @@ midi_out = mido.open_output(hydrogen_port)
 # mapeamento:
 # pad -> nota MIDI
 PAD_NOTES = {
-    0: 38,  # snare
-    1: 36,  # kick
+    0: 45,  # tom-esquerdo
+    # x: 43,  # tom-direito
+    1: 38,  # caixa
     #2: 42   # hihat
 }
 
@@ -40,13 +41,7 @@ while True:
     if len(data) == PACKET_SIZE:
         header, pad, value, timestamp = struct.unpack(PACKET_FORMAT, data)
         if header == 0xAA:
-
-            # converte ADC -> velocity MIDI
-            velocity = int((value / 4095) * 127)
-
-            velocity = max(1, min(127, velocity))
-        
-            print(f"{pad}: {value} {velocity}")
+            print(f"{pad}: {value}")
             nota_midi = PAD_NOTES.get(pad, 38)
             
             midi_out.send(
@@ -54,14 +49,6 @@ while True:
                     'note_on',
                     channel=9,
                     note=nota_midi,
-                    velocity=velocity
-                )
-            )
-
-            midi_out.send(
-                mido.Message(
-                    'note_off',
-                    channel=9,
-                    note=nota_midi
+                    velocity=value
                 )
             )
