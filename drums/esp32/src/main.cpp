@@ -14,28 +14,31 @@ struct __attribute__((packed)) Packet {
     uint32_t timestamp;
 };
 
-const int n = 2;
+const int n = 3;
 
 DrumPad pads[n] = {
-
     {
         2,
         500,
         900,
         0
     },
-
     {
         4,
         500,
         900,
         0
     },
-
+    {
+        15,
+        600,
+        850,
+        0
+    },
 };
 
-const int scanTime = 12;         // ms procurando pico
-const int retriggerDelay = 120;  // ms
+const int scanTime = 8;         // ms procurando pico
+const int retriggerDelay = 80;  // ms
 
 void printPad(int pad, int value) {
     Serial.print("[");
@@ -94,6 +97,8 @@ void loop() {
             packet.pad = i;
             packet.value = clampMIDI(pads[i].min, pads[i].max, peak);
             packet.timestamp = micros();
+
+            printPad(i, packet.value);
 
             Serial.write(
                 (uint8_t*)&packet,
