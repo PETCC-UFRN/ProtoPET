@@ -27,9 +27,8 @@ midi_out = mido.open_output(hydrogen_port)
 # pad -> nota MIDI
 PAD_NOTES = {
     0: 45,  # tom-esquerdo
-    # x: 43,  # tom-direito
     1: 38,  # caixa
-    #2: 42   # hihat
+    2: 36,  # bumbo
 }
 
 ser.reset_input_buffer()
