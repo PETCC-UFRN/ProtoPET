@@ -51,17 +51,17 @@ const int frequenciaPWM = 1000;
 const int resolucaoPWM = 8;
 
 // Velocidades Base
-const int VEL_FRENTE = 150; 
+const int VEL_FRENTE = 120; 
 const int VEL_GIRO   = 150;
 const int VEL_RE     = 100;
 
 // ---------------- Calibração de Trajetória ----------------s
 // Multiplicadores aceitam valores de 0.00 (parado) a 1.00 (100% da força).
-const float COMPENSACAO_MOTOR_ESQUERDO = 0.94; 
-const float COMPENSACAO_MOTOR_DIREITO  = 1.00; 
+const float COMPENSACAO_MOTOR_ESQUERDO = 0.93; 
+const float COMPENSACAO_MOTOR_DIREITO  = 0.96; 
 
 // ---------------- Calibração de Tempo ----------------
-const int TEMPO_GIRO_90    = 200;
+const int TEMPO_GIRO_90    = 260;
 const int TEMPO_MEIA_VOLTA = 400;
 
 // =====================================================
@@ -292,3 +292,4 @@ void loop() {
     darMeiaVolta();
   }
 }
+
