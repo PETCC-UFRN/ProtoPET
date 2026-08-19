@@ -16,29 +16,30 @@ struct __attribute__((packed)) Packet {
 
 const int n = 3;
 
+// altere os valores a depender de quantos pads você está utilizando
 DrumPad pads[n] = {
     {
         2,
-        500,
+        100,
         900,
         0
     },
     {
         4,
-        500,
+        100,
         900,
         0
     },
     {
         15,
-        600,
+        100,
         850,
         0
     },
 };
 
-const int scanTime = 8;         // ms procurando pico
-const int retriggerDelay = 80;  // ms
+const int scanTime = 4;         // ms procurando pico
+const int retriggerDelay = 35;  // ms
 
 void printPad(int pad, int value) {
     Serial.print("[");
@@ -98,7 +99,7 @@ void loop() {
             packet.value = clampMIDI(pads[i].min, pads[i].max, peak);
             packet.timestamp = micros();
 
-            printPad(i, packet.value);
+            // printPad(i, packet.value);
 
             Serial.write(
                 (uint8_t*)&packet,

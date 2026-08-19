@@ -1,4 +1,0 @@
-mido
-pyserial
-python-rtmidi
-pynput
