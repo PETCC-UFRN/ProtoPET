@@ -14,26 +14,47 @@ struct __attribute__((packed)) Packet {
     uint32_t timestamp;
 };
 
-const int n = 3;
+const int n = 4;
 
 // altere os valores a depender de quantos pads você está utilizando
 DrumPad pads[n] = {
     {
         2,
+<<<<<<< HEAD
         100,
+=======
+        400,
+>>>>>>> da69d6b (Feat: 4 tambores)
         900,
         0
     },
     {
+<<<<<<< HEAD
         4,
         100,
+=======
+        27,
+        400,
+>>>>>>> da69d6b (Feat: 4 tambores)
         900,
         0
     },
     {
+<<<<<<< HEAD
         15,
         100,
         850,
+=======
+        12,
+        400,
+        900,
+        0
+    },
+    {
+        32,
+        400,
+        900,
+>>>>>>> da69d6b (Feat: 4 tambores)
         0
     },
 };

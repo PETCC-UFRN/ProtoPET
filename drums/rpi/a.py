@@ -1,7 +1,7 @@
 import serial
 
 ser = serial.Serial(
-    '/dev/serial0',
+    '/dev/ttyACM0',
     115200,
     timeout=1
 )

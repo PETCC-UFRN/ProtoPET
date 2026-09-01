@@ -12,10 +12,17 @@ ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 ser.reset_input_buffer()
 
 PAD_NOTES = {
+<<<<<<< HEAD
     0: ['a', 'q'],
     1: ['s', 'w'],
     2: ['j', 'u'],
     3: ['i', 'k'],
+=======
+    0: 'l',
+    1: 's',
+    2: 'a',
+    3: 'l',
+>>>>>>> da69d6b (Feat: 4 tambores)
 }
 
 
@@ -37,4 +44,7 @@ while True:
 
             threading.Timer(0.02, free_key, args=[pad]).start()
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> da69d6b (Feat: 4 tambores)
