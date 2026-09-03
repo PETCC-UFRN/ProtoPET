@@ -14,49 +14,52 @@ struct __attribute__((packed)) Packet {
     uint32_t timestamp;
 };
 
-const int n = 4;
+const int n = 7; // todos os pads menos o bulbo
 
 // altere os valores a depender de quantos pads você está utilizando
 DrumPad pads[n] = {
-    {
-        2,
-<<<<<<< HEAD
-        100,
-=======
-        400,
->>>>>>> da69d6b (Feat: 4 tambores)
-        900,
-        0
-    },
-    {
-<<<<<<< HEAD
-        4,
-        100,
-=======
-        27,
-        400,
->>>>>>> da69d6b (Feat: 4 tambores)
-        900,
-        0
-    },
-    {
-<<<<<<< HEAD
+    { // chimbau
         15,
-        100,
-        850,
-=======
-        12,
-        400,
+        450,
         900,
         0
-    },
-    {
+    	},
+    { // prato esquerda
+        33,
+        500,
+        900,
+        0
+    	},
+    { // caixa
+        35,
+        200,
+        900,
+        0
+    	},
+    { // tom-esquerda
+        4,
+        700,
+        900,
+        0
+    	},
+    { // tom-direita
         32,
+        600,
+        900,
+        0
+    	},
+    { // prato direito
+        25,
         400,
         900,
->>>>>>> da69d6b (Feat: 4 tambores)
         0
-    },
+    	},
+    { // surdo
+        27,
+        500,
+        900,
+        0
+    	},
 };
 
 const int scanTime = 4;         // ms procurando pico
@@ -120,7 +123,7 @@ void loop() {
             packet.value = clampMIDI(pads[i].min, pads[i].max, peak);
             packet.timestamp = micros();
 
-            // printPad(i, packet.value);
+            printPad(i, packet.value);
 
             Serial.write(
                 (uint8_t*)&packet,
