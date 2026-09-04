@@ -1,50 +1,54 @@
-import serial 
-import struct 
-import threading
+import serial
+import struct
 from pynput.keyboard import Controller
 
 
 PACKET_FORMAT = '<BBBI'
 PACKET_SIZE = struct.calcsize(PACKET_FORMAT)
 
-keyboard = Controller()
-ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
-ser.reset_input_buffer()
-
 PAD_NOTES = {
-<<<<<<< HEAD
-    0: ['a', 'q'],
-    1: ['s', 'w'],
-    2: ['j', 'u'],
-    3: ['i', 'k'],
-=======
-    0: 'l',
-    1: 's',
-    2: 'a',
-    3: 'l',
->>>>>>> da69d6b (Feat: 4 tambores)
+    0: 'd',  # chimbau
+    1: 'f',  # prato esquerda
+    2: 's',  # caixa
+    3: 'j',  # tom esquerda
+    4: 'k',  # tom direita
+    5: 'm',  # prato direito
+    6: 'a',  # surdo
 }
 
+keyboard = Controller()
 
-def free_key(pad):
-    if pad in PAD_NOTES:
-        for key in PAD_NOTES[pad]:
-            keyboard.release(key)
+ser = serial.Serial(
+    '/dev/ttyACM0',
+    115200,
+    timeout=1
+)
+
+ser.reset_input_buffer()
+
 
 while True:
-    # lê pacote binário
     byte = ser.read(1)
-    if byte == b'\xAA':
-        resto = ser.read(PACKET_SIZE - 1)
-        if len(resto) == PACKET_SIZE - 1:
-            header, pad, value, timestamp = struct.unpack(PACKET_FORMAT, byte + resto)
-            if pad in PAD_NOTES:
-                for key in PAD_NOTES[pad]:
-                    keyboard.press(key)
 
-            threading.Timer(0.02, free_key, args=[pad]).start()
+    # Procura o início de um pacote
+    if byte != b'\xAA':
+        continue
 
-<<<<<<< HEAD
+    # Já lemos o header, então faltam 6 bytes
+    resto = ser.read(PACKET_SIZE - 1)
 
-=======
->>>>>>> da69d6b (Feat: 4 tambores)
+    if len(resto) != PACKET_SIZE - 1:
+        continue
+
+    header, pad, value, timestamp = struct.unpack(
+        PACKET_FORMAT,
+        byte + resto
+    )
+
+    key = PAD_NOTES.get(pad)
+
+    if key is None:
+        continue
+
+    keyboard.press(key)
+    keyboard.release(key)
