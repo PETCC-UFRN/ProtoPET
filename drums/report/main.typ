@@ -1,16 +1,65 @@
-#import "@preview/abntyp:0.1.2": *
+#import "@preview/abntyp:0.1.5": *
 #import "@preview/lilaq:0.6.0" as lq
 
-// Configuração do documento usando o template article
-#show: artigo.with(
+#show: dados.with(
+  // --- Dados básicos do trabalho ---
   titulo: "Drummies: Desenvolvimento de uma bateria eletrônica embarcada de baixo custo",
-  autores: (
-    (
-      name: "Gabriel Carvalho Pereira Silva",
-      affiliation: "Bacharelando em Tecnologia da Informação, 20230035087",
-    ),
-  ),
-  resumo: [
+  // DICA: Se não tiver subtítulo, remova ou comente a linha abaixo
+
+  // --- Dados do autor ---
+  autor: "Gabriel Carvalho Pereira Silva",
+
+  // --- Dados da instituição ---
+  instituicao: "Universidade Federal do Rio Grande do Norte",
+  faculdade: "Departamento de Informática e Matemática Aplicada",
+  programa: "PET de Ciência da Computação",
+  // DICA para graduação:
+  //   programa: "Curso de Bacharelado em Matemática",
+
+  // --- Local e data ---
+  local: "Natal",
+  ano: 2026,
+
+  // --- Natureza do trabalho ---
+  // Para DISSERTAÇÃO de mestrado:
+  natureza: "Relatório técnico do protótipo desenvolvido durante o programa ProtoPET",
+
+
+  // --- Orientação ---
+  orientador: "Prof. Dr. Umberto Souza da Costa",
+  // DICA: Se tiver coorientador, descomente:
+  // coorientador: "Prof. Dr. Nome do Coorientador",
+
+  // --- Palavras-chave ---
+  palavras-chave: ("Palavra-chave 1", "Palavra-chave 2", "Palavra-chave 3", "Palavra-chave 4"),
+  palavras-chave-en: ("Keyword 1", "Keyword 2", "Keyword 3", "Keyword 4"),
+)
+
+#show: normas-abnt.with(
+  fonte: "Times New Roman",
+)
+
+
+// ============================================================================
+// PARTE 2: CAPA E FOLHA DE ROSTO
+// ============================================================================
+//
+// A capa e a folha de rosto são elementos obrigatórios (NBR 14724:2024).
+// Elas contêm informações essenciais sobre o trabalho.
+
+// ----------------------------------------------------------------------------
+// CAPA E FOLHA DE ROSTO
+// ----------------------------------------------------------------------------
+// Todos os dados vêm automaticamente do dados() acima.
+// Não é preciso repetir título, autor, instituição, etc.
+
+#capa()
+#folha-rosto()
+// ============================================================================
+// ELEMENTOS TEXTUAIS
+// ============================================================================
+
+#resumo[
     O presente trabalho propõe um modelo de desenvolvimento de uma bateria 
     eletrônica de baixo custo baseada em sistemas embarcados, voltada à 
     prática musical com capacidade de reduzir da propagação sonora ao ambiente 
@@ -25,13 +74,7 @@
     tecnologias embarcadas acessíveis, além de explorar conceitos relacionados 
     à aquisição de sinais, comunicação serial e integração *MIDI*. 
     #link("https://github.com/PETCC-UFRN/ProtoPET/tree/main/drums")[Repositório do Projeto].
-  ],
-)
-
-// ============================================================================
-// ELEMENTOS TEXTUAIS
-// ============================================================================
-
+]
 = Introdução
 
 A prática de instrumentos musicais está intrinsecamente associada à produção sonora, 
@@ -39,8 +82,8 @@ a qual, em determinados contextos, pode representar um fator limitante para a ex
 e o estudo musical. Instrumentos de natureza predominantemente acústica possuem 
 propagação sonora inerente à sua construção, dificultando o controle do volume emitido 
 durante sua utilização.
-
 Em ambientes compartilhados ou com elevada proximidade entre habitações, como 
+
 apartamentos e condomínios, essa característica pode comprometer a prática 
 musical contínua, uma vez que o som produzido pode causar incômodo a terceiros. 
 Nesse contexto, torna-se relevante o desenvolvimento de alternativas que permitam a 
