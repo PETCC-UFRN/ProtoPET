@@ -22,7 +22,7 @@
 
   // --- Natureza do trabalho ---
   // Para DISSERTAÇÃO de mestrado:
-  natureza: "Relatório técnico do protótipo desenvolvido durante o programa ProtoPET",
+  natureza: "Relatório técnico do protótipo desenvolvido durante o programa ProtoPET, uma iniciativa do PET-CC UFRN(Programa de Educação Tutorial de Ciência da Computação) que visa um aprofundamento técnico dos petianos na área de Sistemas Embarcados.",
 
 
   // --- Orientação ---
@@ -31,12 +31,13 @@
   // coorientador: "Prof. Dr. Nome do Coorientador",
 
   // --- Palavras-chave ---
-  palavras-chave: ("Palavra-chave 1", "Palavra-chave 2", "Palavra-chave 3", "Palavra-chave 4"),
-  palavras-chave-en: ("Keyword 1", "Keyword 2", "Keyword 3", "Keyword 4"),
+  palavras-chave: ("Sistemas Embarcados", "Instrumentos Musicais", "Baixo-Custo"),
+  palavras-chave-en: ("Embedded Systems", "Musical Instruments", "Low-Cost"),
 )
 
 #show: normas-abnt.with(
   fonte: "Times New Roman",
+  arquivo-bibliografia: read("referencias.bib"),
 )
 
 
@@ -62,38 +63,40 @@
 #resumo[
     O presente trabalho propõe um modelo de desenvolvimento de uma bateria 
     eletrônica de baixo custo baseada em sistemas embarcados, voltada à 
-    prática musical com capacidade de reduzir da propagação sonora ao ambiente 
-    externo. O sistema utiliza sensores piezoelétricos para detecção das batidas 
-    realizadas pelo usuário, um microcontrolador *ESP32* responsável pela aquisição 
-    e processamento dos sinais analógicos, e um *RaspberryPi* para recepção dos 
-    dados via comunicação serial *UART* e conversão para eventos *MIDI*. Os sinais 
-    gerados são utilizados para controle de instrumentos virtuais no software 
-    Hydrogen, permitindo a reprodução sonora em tempo real por meio de fones de 
-    ouvido ou sistemas de áudio externos. O projeto busca demonstrar a viabilidade 
-    da construção de instrumentos musicais eletrônicos de baixo custo utilizando 
-    tecnologias embarcadas acessíveis, além de explorar conceitos relacionados 
-    à aquisição de sinais, comunicação serial e integração *MIDI*. 
-    #link("https://github.com/PETCC-UFRN/ProtoPET/tree/main/drums")[Repositório do Projeto].
+    prática de instrumentos musicais com capacidade de restringir sua 
+    propagação sonora ao ambiente externo. O sistema possui dois modos de 
+    funcionamento: O *Modo Jogo*, com uma abordagem gamificada que integra a 
+    experiência ao jogo *Clone Hero* e o *Modo Instrumento*, que é dedicado
+    a proporcionar uma prática musical mais fiel à realidade, onde a 
+    intensidade da interação com os instrumento faz diferença na magnitude 
+    do som, o. Ambos tem como ciruito base um microcontrolador ESP32 que 
+    utiliza sensores piezoelétricos para detecção das batidas realizadas
+    pelo usuário. O projeto busca demonstrar a viabilidade da construção 
+    de instrumentos musicais eletrônicos de baixo custo utilizando tecnologias 
+    embarcadas acessíveis. O projeto está disponível 
+    #link("https://github.com/PETCC-UFRN/ProtoPET/tree/main/drums")[*nesse*] 
+    repositório.
 ]
 = Introdução
 
 A prática de instrumentos musicais está intrinsecamente associada à produção sonora, 
-a qual, em determinados contextos, pode representar um fator limitante para a execução 
+que, em determinados contextos, pode representar um fator limitante para a execução 
 e o estudo musical. Instrumentos de natureza predominantemente acústica possuem 
 propagação sonora inerente à sua construção, dificultando o controle do volume emitido 
 durante sua utilização.
-Em ambientes compartilhados ou com elevada proximidade entre habitações, como 
 
+Em ambientes compartilhados ou com elevada proximidade entre habitações, como 
 apartamentos e condomínios, essa característica pode comprometer a prática 
 musical contínua, uma vez que o som produzido pode causar incômodo a terceiros. 
-Nesse contexto, torna-se relevante o desenvolvimento de alternativas que permitam a 
+Sendo assim, torna-se relevante o desenvolvimento de alternativas que permitam a 
 execução musical com menor impacto acústico ao ambiente externo.
 
-As baterias eletrônicas destacam-se como uma solução amplamente empregada para esse 
-problema, possibilitando ao usuário praticar o instrumento utilizando fones de ouvido e 
-reduzindo significativamente a propagação sonora no ambiente. Entretanto, equipamentos 
-comerciais dessa categoria frequentemente apresentam custos elevados, dificultando sua 
-aquisição por estudantes e músicos iniciantes.
+Nesse contexto, as baterias eletrônicas destacam-se como uma solução amplamente 
+empregada para esse problema, possibilitando ao usuário praticar o instrumento 
+utilizando fones de ouvido e reduzindo significativamente a propagação sonora no 
+ambiente. Entretanto, equipamentos comerciais dessa categoria frequentemente 
+apresentam custos elevados, dificultando sua aquisição por estudantes e músicos 
+iniciantes.
 
 Dessa forma, o presente trabalho propõe o desenvolvimento de um protótipo de bateria 
 eletrônica de baixo custo baseado em sistemas embarcados, utilizando sensores 
@@ -218,7 +221,7 @@ de desmontagem mais conveniente.
 = Fundamentação Teórica
 
 Para o desenvolvimento do protótipo foram usados três componentes principais: 
-Sensores Piezoelétricos, uma placa de desenvolvimento _ESP32_ e um _RaspberryPI_.
+Sensores Piezoelétricos, uma placa de desenvolvimento _ESP32_ e um computador.
 
 == Sensor piezzoelétrico
 
@@ -368,6 +371,7 @@ uma batida no _pad_ gera um sinal semelhante ao seguinte:
     label: [Com o resistor e diodo]
   ),
 )
+#fonte[Autoria própria (2026).]
 
 Uma alternativa ao _ESP32_ seria usar um Módulo Conversor Analógico-Digital, visto 
 que nesse caso pode-se dizer que as funções do _ESP32_ estão sendo sub-utilizadas. 
@@ -375,7 +379,7 @@ Mas, conforme definido no *RNF1* o baixo custo geralmente está associado ao uso
 de componentes de fácil acesso. E uma vez o sinal lido, tem inicio o processamento 
 do sinal, descrito na sessão posterior.
 
-=== ESP32-RasberryPi
+=== ESP32-Computador
 
 Conforme mostrado anteriormente, o sinal recebido tem uma natureza não linear, e 
 isso afeta diretamente a forma na qual o processamento ocorre. A leitura de cada _pad_
@@ -394,9 +398,9 @@ Os processos anteriores se traduzem em código da seguinte forma:
 ```cpp
 const int scanTime = 8;    // Intervalo de leitura em ms
 
+int min;               // Valor piso do pad
 struct DrumPad {
     int pin;               // Pino ADC do ESP32
-    int min;               // Valor piso do pad
     int max;               // Valor teto do pad
     unsigned long lastHit; // O instante da batida salva
 };
@@ -520,12 +524,4 @@ e cumpriu seu propósito para o aprendizado dos conceitos da disciplina.
 // são inseridas automaticamente. Também pode usar diretamente:
 // #abnt-bibliography("examples/referencias.bib")
 
-// OPÇÃO 2: Referências manuais (demonstração abaixo)
 
-#heading(level: 1, numbering: none, "REFERÊNCIAS")
-
-#set par(hanging-indent: 1.25cm, first-line-indent: 0pt)
-
-GUO, Liangchao; HAN, Su-Ting; ZHOU, Ye. *Electromechanical coupling effects for data storage and synaptic devices. Nano Energy*, v. 77, p. 105156, 2020. Disponível em: https://www.sciencedirect.com/science/article/pii/S2211285520307345. Acesso em: 25 maio 2026.
-
-ROHINI, S.; VIKINDRA REDDY, P.; TEJASREE, N.; SUDHEER, G.; RAKESH, S. Piezo-Step Power Generator. International Journal of Innovative Research in Science, Engineering and Technology, v. 13, n. 3, p. 2562–2568, mar. 2024. DOI: 10.15680/IJIRSET.2024.1303187. Disponível em: https://www.ijirset.com/upload/2024/march/187_Piezo.pdf. Acesso em: 22 jun. 2026.
