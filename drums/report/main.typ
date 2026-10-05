@@ -37,7 +37,6 @@
 
 #show: normas-abnt.with(
   fonte: "Times New Roman",
-  arquivo-bibliografia: read("referencias.bib"),
 )
 
 
@@ -524,4 +523,9 @@ e cumpriu seu propósito para o aprendizado dos conceitos da disciplina.
 // são inseridas automaticamente. Também pode usar diretamente:
 // #abnt-bibliography("examples/referencias.bib")
 
-
+#bibliography(
+  "referencias.bib",
+  style: "associacao-brasileira-de-normas-tecnicas",
+  title: "REFERÊNCIAS",
+  full: true, // remova se quiser só as citadas
+)
