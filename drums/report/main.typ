@@ -439,8 +439,9 @@ O protótipo final foi composto por 4 Tambores, 3 Pratos e 1 Pedal. Todas as pe�
 )
 #fonte[Elaborado pelo autor (2026).]
 
-Ao término da implementação, verificou-se que a maioria dos requisitos
-estabelecidos foi atendida integralmente ou parcialmente conforme detalhado a seguir.
+Ao término da implementação, o protótipo foi apresentado na Mostra de Profissões da UFRN (2026) no estande do curso de Bacharelado em Ciência da Computação. A bateria impactou diretamente no estande, ajudando a obter cerca de 160 visitantes registrados nos 2 dias de evento.
+
+Por fim, verificou-se que a maioria dos requisitos estabelecidos foi atendida integralmente ou parcialmente conforme detalhado a seguir.
 
 #heading(numbering: none, level: 23)[Requisitos funcionais:]
 \
