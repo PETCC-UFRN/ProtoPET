@@ -164,11 +164,13 @@ do sistema, independentemente de sua materialização física.
 
 === Requisitos
 
-Requisitos funcionais dizem respeito a serviços que o sistema deve fornecer, suas 
-respostas a entradas específicas e os comportamentos esperados em determinadas 
-situações #citar("Sommerville", "2016"). Tal conceito é fundamental na 
-engenharia, de maneira geral, visto que na concepção do projeto é necessário traçar 
-metas de implementação, e os requisitos servem justamente para isso.
+Requisitos funcionais descrevem os serviços que o sistema deve fornecer, suas respostas
+a entradas específicas e os comportamentos esperados em determinadas situações
+#citar("Sommerville", "2016"). Já os requisitos não-funcionais estabelecem 
+restrições e critérios de qualidade que não dizem respeito diretamente às funcionalidades
+do sistema, como tempo de resposta, uso de memória e segurança. Ambos são fundamentais na
+Engenharia de Software, pois orientam o desenvolvimento e estabelecem metas a serem alcançadas
+durante a implementação do projeto.
 
 === MIDI
 
@@ -278,27 +280,27 @@ ocorre através de um algoritmo de scan descrito no pseudocódigo abaixo:
               $n - 1$,
               {
                 Comment[Ler sinal do sensor associado ao pad]
-                Assign("valor")[$"Ler-Sensor"("pads"[i])$]
+                Assign("valor")[$"lerSensor"("pads"[i])$]
 
                 If(
-                  $"valor" > "pads"[i].min and "Intervalo-Valido"(i)$,
+                  $"valor" > "pads"[i].min and "intervaloValido"(i)$,
                   {
                     Comment[Identificar o pico do impacto]
-                    Assign("pico")[$"Detectar-Pico"(i)$]
+                    Assign("pico")[$"detectarPico"(i)$]
 
                     Comment[Converter intensidade para escala MIDI]
-                    Assign("intensidade")[$"Converter-MIDI"("pico")$]
+                    Assign("intensidade")[$"converterMIDI"("pico")$]
 
                     Comment[Registrar instante e montar pacote]
-                    Assign("timestamp")[$"Tempo-Atual"()$]
+                    Assign("timestamp")[$"tempoAtual"()$]
 
                     Assign(
                       "pacote",
-                      $"Criar-Pacote"(i, "intensidade", "timestamp")$,
+                      $"criarPacote"(i, "intensidade", "timestamp")$,
                     )
 
                     Comment[Transmitir evento ao computador]
-                    Call("Transmitir", ("pacote",))
+                    Call("transmitir", ("pacote",))
                   },
                 )
               },
@@ -344,9 +346,8 @@ estes serão os valores considerados para transformar o valor lido em um número
 
 Uma vez conhecido o valor, sabe-se que este está associado ao _pad n_, pois a 
 bateria consiste em uma lista de _pads_, e começa o processo de envio para o a outra 
-máquina. É utilizado o protocolo *UART*(_Universal Asynchronous Receiver/Transmitter_) 
-para enviar os dados, sendo assim, fisicamente se faz necessário que haja um *TX* e um 
-*RX*, presente na entrada USB usada.
+máquina. É utilizado o protocolo *UART* para enviar os dados, sendo assim, 
+fisicamente se faz necessário que haja um *TX* e um *RX*, presente na entrada USB usada.
 
 A formatação dos dados é feita através de pacotes binários a fim de diminuir o tempo 
 de transmissão que formatar em *ASCII*(_American Standard Code for Information Interchange_)
@@ -377,8 +378,8 @@ virtual. Dessa forma, o protótipo pode ser integrado a softwares de produção 
 associação às respectivas notas MIDI.
 
 = Resultados e Discussão
-
 Ao fim pipipi
+
 
 Obs: Notei que as fotos atuais estão muito ruins, vou tirar outras para a versão final
 
