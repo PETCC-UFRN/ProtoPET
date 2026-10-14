@@ -164,7 +164,7 @@ do sistema, independentemente de sua materialização física.
 
 === Requisitos
 
-Requisitos funcionais descrevem os serviços que o sistema deve fornecer, suas respostas
+ Requisitos funcionais descrevem os serviços que o sistema deve fornecer, suas respostas
 a entradas específicas e os comportamentos esperados em determinadas situações
 #citar("Sommerville", "2016"). Já os requisitos não-funcionais estabelecem 
 restrições e critérios de qualidade que não dizem respeito diretamente às funcionalidades
@@ -224,21 +224,21 @@ etapa fundamental para guiar as tomadas de decisão ao longo do projeto.
 
 == Requisitos Funcionais
 
-+ *Compatibilidade com MIDI:* Visando maximizar a compatibilidade com os _softwares_ de produção musical que são mais tradicionais no mercado, foi imposto que a entrada do sistema deve seguir o padrão . Dessa forma, o funcionamento do projeto não fica restrito ao _software_ que posteriormente será proposto(*RF1*).
++ *Compatibilidade com MIDI: (RF1)* Visando maximizar a compatibilidade com os _softwares_ de produção musical que são mais tradicionais no mercado, foi imposto que a entrada do sistema deve seguir o padrão . Dessa forma, o funcionamento do projeto não fica restrito ao _software_ que posteriormente será proposto.
 
-+ *Transmissão de som via interface de áudio de escolha:* Diferentemente dos instrumentos acústicos, um diferencial dos instrumentos de natureza digital é a possibilidade de propagação do som de maneira mais seletiva. Sendo assim, uma das restrições impostas para o produto final é ser compatível com interfaces capazes de transmitir áudio, tais como P2, P3 e _Bluetooth_(*RF2*).
++ *Transmissão de som via interface de áudio de escolha: (RF2)* Diferentemente dos instrumentos acústicos, um diferencial dos instrumentos de natureza digital é a possibilidade de propagação do som de maneira mais seletiva. Sendo assim, uma das restrições impostas para o produto final é ser compatível com interfaces capazes de transmitir áudio, tais como P2, P3 e _Bluetooth_.
 
-+ *Som proporcional à intensidade da detecção:* O sistema deve relacionar a intensidade do impacto detectado pelos sensores piezoelétricos à intensidade do som reproduzido, garantindo que diferentes intensidades de batida resultem em respostas sonoras correspondentes. Esse requisito é fundamental para proporcionar uma experiência mais próxima à execução de um instrumento acústico, especialmente no Modo Instrumento(*RF3*).
++ *Som proporcional à intensidade da detecção: (RF3)* O sistema deve relacionar a intensidade do impacto detectado pelos sensores piezoelétricos à intensidade do som reproduzido, garantindo que diferentes intensidades de batida resultem em respostas sonoras correspondentes. Esse requisito é fundamental para proporcionar uma experiência mais próxima à execução de um instrumento acústico, especialmente no Modo Instrumento.
 
 == Requisitos não-funcionais
 
-+ *Baixo custo:* O projeto busca desenvolver uma bateria eletrônica funcional utilizando componentes de baixo custo e fácil aquisição. Essa abordagem visa tornar o instrumento uma alternativa acessível para estudantes, entusiastas e instituições de ensino interessados em explorar conceitos de eletrônica, Sistemas Embarcados e prática musical sem a necessidade de investir em equipamentos comerciais de alto custo(*RNF1*).
++ *Baixo custo: (RNF1)* O projeto busca desenvolver uma bateria eletrônica funcional utilizando componentes de baixo custo e fácil aquisição. Essa abordagem visa tornar o instrumento uma alternativa acessível para estudantes, entusiastas e instituições de ensino interessados em explorar conceitos de eletrônica, Sistemas Embarcados e prática musical sem a necessidade de investir em equipamentos comerciais de alto custo.
 
-+ *Ocupar pouco espaço físico:* O protótipo deve apresentar dimensões compactas, facilitando sua utilização e seu armazenamento em ambientes com espaço limitado, como apartamentos e residências pequenas. Além disso, a utilização de fones de ouvido permite reduzir a emissão de ruídos para o ambiente externo, favorecendo a prática musical em locais com restrições acústicas(*RNF2*).
++ *Ocupar pouco espaço físico (RNF2):* O protótipo deve apresentar dimensões compactas, facilitando sua utilização e seu armazenamento em ambientes com espaço limitado, como apartamentos e residências pequenas. Além disso, a utilização de fones de ouvido permite reduzir a emissão de ruídos para o ambiente externo, favorecendo a prática musical em locais com restrições acústicas.
 
-+ *Baixa latência:* O sistema deve minimizar o intervalo entre a detecção de um impacto e a reprodução do som correspondente, preservando a sincronia entre a execução física e a resposta sonora. Para isso, estabelece-se um limite de 300 milissegundos para o processamento do sinal, buscando proporcionar uma experiência de uso satisfatória(*RNF3*).
++ *Baixa latência (RNF3):* O sistema deve minimizar o intervalo entre a detecção de um impacto e a reprodução do som correspondente, preservando a sincronia entre a execução física e a resposta sonora. Para isso, estabelece-se um limite de 300 milissegundos para o processamento do sinal, buscando proporcionar uma experiência de uso satisfatória.
 
-+ *Modularidade:* O protótipo deve apresentar uma estrutura modular, com componentes interconectados por cabos removíveis, de modo a facilitar sua montagem e desmontagem. Essa característica contribui para simplificar o armazenamento, o transporte e a organização do equipamento, complementando o requisito de redução do espaço físico ocupado(*RNF4*).
++ *Modularidade: (RNF4)* O protótipo deve apresentar uma estrutura modular, com componentes interconectados por cabos removíveis, de modo a facilitar sua montagem e desmontagem. Essa característica contribui para simplificar o armazenamento, o transporte e a organização do equipamento, complementando o requisito de redução do espaço físico ocupado.
 
 
 == Especificação
@@ -263,7 +263,8 @@ ocorre através de um algoritmo de scan descrito no pseudocódigo abaixo:
   vstroke: .5pt + luma(200),
   {
     import algorithmic: *
-
+  
+    
     Procedure(
       "detectarImpactos",
       (),
@@ -275,32 +276,36 @@ ocorre através de um algoritmo de scan descrito no pseudocódigo abaixo:
           "verdadeiro",
           {
             For(
-              $i$,
-              $0$,
-              $n - 1$,
+              [$i <- 0$ *to* $n -1$],
               {
-                Comment[Ler sinal do sensor associado ao pad]
+                LineComment(
                 Assign("valor")[$"lerSensor"("pads"[i])$]
-
+              , "Ler o Sinal do Sensor associado ao pad[i]")
+                LineBreak
                 If(
                   $"valor" > "pads"[i].min and "intervaloValido"(i)$,
                   {
-                    Comment[Identificar o pico do impacto]
+                    LineComment(
                     Assign("pico")[$"detectarPico"(i)$]
-
-                    Comment[Converter intensidade para escala MIDI]
+                  , "Identificar o Valor de Pico")
+                    LineComment(
                     Assign("intensidade")[$"converterMIDI"("pico")$]
+                    , "Registrar Intensidade Convertida")
+                    LineComment(Assign("timestamp")[$"tempoAtual"()$], "Registrar Instante Atual")
 
-                    Comment[Registrar instante e montar pacote]
-                    Assign("timestamp")[$"tempoAtual"()$]
-
+                    LineComment(
                     Assign(
                       "pacote",
                       $"criarPacote"(i, "intensidade", "timestamp")$,
+                    ),
+                    "Monta o Pacote")
+
+                    LineComment(
+                    Call("transmitir", ("pacote",))
+                      , "Transmite evento ao Computador"
                     )
 
-                    Comment[Transmitir evento ao computador]
-                    Call("transmitir", ("pacote",))
+                    
                   },
                 )
               },
@@ -344,9 +349,7 @@ computador. E para isso o `min` e o `max` se fazem mais importantes ainda, pois
 estes serão os valores considerados para transformar o valor lido em um número de 
 0(`min`) a 127(`max`, teto da interface *MIDI*).
 
-Uma vez conhecido o valor, sabe-se que este está associado ao _pad n_, pois a 
-bateria consiste em uma lista de _pads_, e começa o processo de envio para o a outra 
-máquina. É utilizado o protocolo *UART* para enviar os dados, sendo assim, 
+Uma vez conhecido o valor, seu respectivo _pad_ associado é identificado. Com essa informação, o processo de envio para a outra máquina começa. É utilizado o protocolo *UART* para enviar os dados, sendo assim, 
 fisicamente se faz necessário que haja um *TX* e um *RX*, presente na entrada USB usada.
 
 A formatação dos dados é feita através de pacotes binários a fim de diminuir o tempo 
@@ -354,7 +357,8 @@ de transmissão que formatar em *ASCII*(_American Standard Code for Information 
 causaria. A especificação era a seguinte:
 
 ```cpp
-struct __attribute__((packed)) Packet {
+struct __attribute__((packed)) Packet 
+{
     uint8_t header;     // Início do pacote
     uint8_t pad;        // Índice do pad
     uint8_t value;      // Valor da batida(entre 0 e 127)
@@ -365,45 +369,67 @@ struct __attribute__((packed)) Packet {
 
 No Modo Jogo, os sinais são interpretados de forma binária, desconsiderando-se a 
 intensidade do impacto. Essa abordagem é adequada ao *Clone Hero*, uma vez que a 
-jogabilidade depende da detecção das batidas, independentemente de suaintensidade. 
+jogabilidade depende da detecção das batidas, independentemente de sua intensidade. 
 Para implementar essa funcionalidade, o script `clone_hero.py` utiliza a biblioteca 
 `pyinput` para mapear os impactos detectados ao pressionamento de teclas específicas 
 do teclado, previamente associadas às ações correspondentes no jogo.
 
 Por sua vez, o Modo Instrumento considera a intensidade dos impactos, convertendo-a em
 valores de velocidade MIDI. Essa funcionalidade é implementada pelo script `midi.py`, que
-utiliza a biblioteca mido para transmitir os eventos musicais por meio de uma interface MIDI
+utiliza a biblioteca `mido` para transmitir os eventos musicais por meio de uma interface MIDI
 virtual. Dessa forma, o protótipo pode ser integrado a softwares de produção musical, como o
 *Hydrogen*, utilizado durante os testes para verificar o recebimento dos eventos e sua
 associação às respectivas notas MIDI.
 
 = Resultados e Discussão
-Ao fim pipipi
 
+Para a confecção da estrutura física da bateria, foram utilizados materiais de baixo custo e fácil acesso, tais como recipientes plásticos, papelão, folhas de EVA e tubos PVC. As peças foram divididas em 3 categorias:
+- *Tambores:* formados por recipientes plásticos com tampa
+- *Pratos:* formados apenas por uma tampa de plástico
+- *Pedal:* formado com papelão estruturado
+Cada componente continha um sensor piezoelétrico, um conector TS de 1/4 polegadas e tinham sua área de impacto revestida com EVA.
 
-Obs: Notei que as fotos atuais estão muito ruins, vou tirar outras para a versão final
-
-#figure(
-  image("images/tambor1.jpeg", width: 80%),
-  caption: [Tom da bateria],
+#grid(
+  columns: (1fr, 1.8fr),
+  gutter: 4pt, 
+  align: center + horizon,
+  figure(
+  image("images/tambor2.jpeg", width: 100%),
+  caption: [Tambor da bateria],
+),
+  figure(
+  image("images/tambor2_aberto.jpeg", width: 100%),
+  caption: [Tambor por dentro],
+),
 )
 #fonte[Elaborado pelo autor (2026).]
 
-#figure(
-  image("images/prato.jpeg", width: 80%),
+#grid(
+  columns: (1fr, 1.8fr),
+  gutter: 4pt, 
+  align: center + horizon,
+  figure(
+  image("images/prato.jpeg", width: 100%),
   caption: [Prato da bateria],
-)
-#fonte[Elaborado pelo autor (2026).]
-
-#figure(
-  image("images/tambor2.jpeg", width: 80%),
-  caption: [Caixa da bateria],
+),
+  figure(
+  image("images/prato_ligacao.jpeg", width: 100%),
+  caption: [Ligação do Prato],
+),
 )
 #fonte[Elaborado pelo autor (2026).]
 
 #figure(
   image("images/pedal.png", width: 80%),
   caption: [Pedal da bateria],
+)
+#fonte[Elaborado pelo autor (2026).]
+
+O protótipo final foi composto por 4 Tambores, 3 Pratos e 1 Pedal. Todas as peças foram conectadas a um componente adicional que guardava o microcontrolador _ESP32_, e por fim, organizadas em formato de bateria utilizando uma estrutura de tubos PVC. 
+
+#figure(
+  image("images/pote_com_ESP32.jpeg", width: 80%),
+  caption: [Pote com _ESP32_],
 )
 #fonte[Elaborado pelo autor (2026).]
 
@@ -414,46 +440,56 @@ Obs: Notei que as fotos atuais estão muito ruins, vou tirar outras para a vers�
 #fonte[Elaborado pelo autor (2026).]
 
 Ao término da implementação, verificou-se que a maioria dos requisitos
-estabelecidos foi atendida integralmente, enquanto alguns foram atendidos
-parcialmente, conforme detalhado a seguir.
+estabelecidos foi atendida integralmente ou parcialmente conforme detalhado a seguir.
 
-- *RF1 — Atendido integralmente:* a compatibilidade da biblioteca
+#heading(numbering: none, level: 23)[Requisitos funcionais:]
+\
+- *Compatibilidade com MIDI (RF1) — Atendido integralmente:* a compatibilidade da biblioteca
   `mido` facilitou a implementação da comunicação MIDI, permitindo
   atender ao requisito estabelecido.
-
-- *RF2 — Atendido integralmente:* a utilização do Raspbian como
+\
+- *Transmissão de som via interface de áudio de escolha (RF2) — Atendido integralmente:* a utilização do Raspbian como
   sistema operacional facilitou a integração dos recursos de áudio e
   Bluetooth, cujos drivers já estavam disponíveis no ambiente.
-
-- *RF3 — Atendido integralmente:* os valores de cada _pad_ são
+\
+- *Som proporcional à intensidade da detecção (RF3) — Atendido integralmente:* os valores de cada _pad_ são
   normalizados individualmente, considerando os limites mínimo e
   máximo definidos para cada sensor. Dessa forma, a intensidade do
   som reproduzido corresponde à intensidade do impacto detectado.
+  
+#heading(numbering: none, level: 3)[Requisitos não-funcionais:]
 
-- *RNF1 — Atendido parcialmente:* o custo total estimado para a
-  construção da bateria foi de R\$ 1.310,00, distribuído da seguinte
+- *Baixo custo (RNF1) — Atendido parcialmente:* o custo total estimado para a
+  etapa de construção da bateria foi de R\$ 410,00 distribuído da seguinte
   forma:
   - Estrutura de PVC: R\$ 120,00.
   - Componentes eletrônicos: R\$ 50,00.
   - ESP32: R\$ 40,00.
-  - Computador: *Preço variável*, mas a configuração mínima exigida pelo Hydrogen e Clone Hero faz com que a maioria dos notebooks consiga atender os requisitos.
+  - Cabos e Conectores TS de 1/4 polegada:  R\$ 200,00
 
+
+Note que o sistema necessita de um computador auxiliar para executar os softwares testados (Hydrogen e Clone Hero).  
 Um ponto de melhoria possível para o trabalho seria conseguir substituir o computador por 
 um celular para fazer o retorno da interação, visto que o grau de acessibilidade do 
 dispositivo é maior.
 
-- *RNF2 — Atendido integralmente:* a bateria ocupa uma área aproximada
+Outro ponto de melhoria seria substituir as ligações via TS de 1/4 polegada por opções de menor custo, dado que o gasto neles representou cerca de 48% do gasto total.
+
+\
+
+- *Ocupar pouco espaço físico (RNF2) — Atendido integralmente:* a bateria ocupa uma área aproximada
   de 2 m² e apresenta altura de cerca de 1,2 m, atendendo ao objetivo
   de limitar o espaço físico necessário para sua utilização.
-
-- *RNF3 — Atendido integralmente:* conforme apresentado na Seção
+\
+- *Baixa latência (RNF3) — Atendido integralmente:* conforme apresentado na Seção
   4.1.2, a latência observada permaneceu abaixo do limite de 300 ms
   estabelecido para o projeto.
-
-- *RNF4 — Atendido parcialmente:* limitações financeiras dificultaram
+\
+- *Modularidade (RNF4) — Atendido parcialmente:* limitações financeiras dificultaram
   a implementação de uma estrutura completamente modular. Além disso,
   os custos adicionais associados a essa característica poderiam
   comprometer o atendimento ao requisito de baixo custo (RNF1).
+\
 
 Diante dos resultados obtidos, considera-se que o projeto foi
 executado de maneira satisfatória, atendendo à maior parte dos
