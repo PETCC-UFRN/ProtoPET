@@ -40,5 +40,5 @@ O [drums](docs/projetos/drums.md) consiste em um projeto que visa fazer uma bate
 
 ## Timbot
 
-O [timbot](docs/projetos/timbot.md) é um robô autônomo projetado para resolver labirintos utilizando algoritmos de exploração clássicos. 
+O [timbot](https://github.com/PETCC-UFRN/ProtoPET/tree/main/timbot) é um robô autônomo projetado para resolver labirintos utilizando algoritmos de exploração clássicos. 
 
