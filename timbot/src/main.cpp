@@ -1,174 +1,239 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include <ESP32Servo.h>
 #include <VL53L0X.h>
 
-Servo meuServo;
-VL53L0X sensor;
 
-// --- Pinos do Servo e Sensor ---
-const int pinoServo        = 25;
-const int ANGULO_DIREITA   = 180;
-const int ANGULO_CENTRO    = 90;
-const int ANGULO_ESQUERDA  = 0;
+// Pinos I2C Seguros 
+#define SDA_PIN 15
+#define SCL_PIN 16
 
-// --- Distâncias ---
-const int DISTANCIA_LIMITE = 200;
+// Pinos XSHUT 
+#define XSHUT_ESQ 9
+#define XSHUT_FRENTE 18
+#define XSHUT_DIR 17
 
-// --- Pinos da Ponte H L298N ---
-const int pinoIN1 = 26;
-const int pinoIN2 = 27;
-const int pinoIN3 = 14;
-const int pinoIN4 = 12;
+// Pinos Ponte H MX1508 
+const int pinoIN1 = 10; // Motor Esq - Frente
+const int pinoIN2 = 11; // Motor Esq - Trás
+const int pinoIN3 = 12; // Motor Dir - Frente
+const int pinoIN4 = 13; // Motor Dir - Trás
 
-// --- Calibração de Movimento (ms) ---
-const int TEMPO_GIRO_90    = 300;
-const int TEMPO_MEIA_VOLTA = 600; // dobro do giro de 90°
+VL53L0X sensorEsq;
+VL53L0X sensorFrente;
+VL53L0X sensorDir;
 
-// --- Motores ---
+const int DISTANCIA_LIMITE = 100; // mm 
+const int DISTANCIA_LIMITE_DIR = 200; // mm
+const int DISTANCIA_LIMITE_FRENTE = 150; // mm
+const int DISTANCIA_FREIO = 300;  // mm
+const int DISTANCIA_MINIMA_LATERAL = 80; // mm
 
-void moverFrente() {
-  digitalWrite(pinoIN1, HIGH);
-  digitalWrite(pinoIN2, LOW);
-  digitalWrite(pinoIN3, HIGH);
-  digitalWrite(pinoIN4, LOW);
-}
+const float KP_CENTRALIZAR = 0.5;       
+const int LARGURA_MAX_CORREDOR = 250;
+
+const int VEL_FRENTE = 150; 
+const int VEL_GIRO   = 200;
+const int VEL_RE     = 200;
+
+
+const float COMPENSACAO_DIR = 1.0; 
+const float COMPENSACAO_ESQ = 1.0; 
+
+const int TEMPO_GIRO_90    = 150;
+const int TEMPO_MEIA_VOLTA = 400;
+
+enum estado { SEGUINDO_CORREDOR, GIRANDO_ESQUERDA, GIRANDO_DIREITA, DANDO_MEIA_VOLTA };
 
 void pararMotores() {
-  digitalWrite(pinoIN1, LOW);
-  digitalWrite(pinoIN2, LOW);
-  digitalWrite(pinoIN3, LOW);
-  digitalWrite(pinoIN4, LOW);
+  analogWrite(pinoIN1, 0);
+  analogWrite(pinoIN2, 0);
+  analogWrite(pinoIN3, 0);
+  analogWrite(pinoIN4, 0);
+  delay(200);
+}
+
+void moverTras() {
+  analogWrite(pinoIN1, 0);
+  analogWrite(pinoIN2, VEL_RE * COMPENSACAO_ESQ);
+  analogWrite(pinoIN3, 0);
+  analogWrite(pinoIN4, VEL_RE * COMPENSACAO_DIR);
+}
+
+void moverFrente() {
+  analogWrite(pinoIN1, VEL_FRENTE * COMPENSACAO_ESQ);
+  analogWrite(pinoIN2, 0);
+  analogWrite(pinoIN3, VEL_FRENTE * COMPENSACAO_DIR);
+  analogWrite(pinoIN4, 0);
+}
+
+void moverFrentePoquinho() {
+  analogWrite(pinoIN1, VEL_FRENTE * COMPENSACAO_ESQ);
+  analogWrite(pinoIN2, 0);
+  analogWrite(pinoIN3, VEL_FRENTE * COMPENSACAO_DIR);
+  analogWrite(pinoIN4, 0);
+  delay(200);
+  pararMotores();
+}
+
+void moverTrasDireitaPoquinho() {
+  analogWrite(pinoIN1, 0);
+  analogWrite(pinoIN2, 0);
+  analogWrite(pinoIN3, 0);
+  analogWrite(pinoIN4, VEL_RE * COMPENSACAO_DIR);
+  delay(200);
+  pararMotores();
+}
+
+void moverTrasEsquerdaPoquinho() {
+  analogWrite(pinoIN1, 0);
+  analogWrite(pinoIN2, VEL_RE * COMPENSACAO_ESQ);
+  analogWrite(pinoIN3, 0);
+  analogWrite(pinoIN4, 0);
+  delay(200);
+  pararMotores();
 }
 
 void girarDireita() {
-  digitalWrite(pinoIN1, HIGH);
-  digitalWrite(pinoIN2, LOW);
-  digitalWrite(pinoIN3, LOW);
-  digitalWrite(pinoIN4, HIGH);
+  // Motor Esquerdo p/ Frente, Direito p/ Trás
+  analogWrite(pinoIN1, VEL_GIRO * COMPENSACAO_ESQ);
+  analogWrite(pinoIN2, 0);
+  analogWrite(pinoIN3, 0);
+  //analogWrite(pinoIN4, VEL_GIRO * COMPENSACAO_DIR);
   delay(TEMPO_GIRO_90);
   pararMotores();
 }
 
 void girarEsquerda() {
-  digitalWrite(pinoIN1, LOW);
-  digitalWrite(pinoIN2, HIGH);
-  digitalWrite(pinoIN3, HIGH);
-  digitalWrite(pinoIN4, LOW);
+  // Motor Esquerdo p/ Trás, Direito p/ Frente
+  analogWrite(pinoIN1, 0);
+  //analogWrite(pinoIN2, VEL_GIRO * COMPENSACAO_ESQ);
+  analogWrite(pinoIN3, VEL_GIRO * COMPENSACAO_DIR);
+  analogWrite(pinoIN4, 0);
   delay(TEMPO_GIRO_90);
   pararMotores();
 }
 
 void darMeiaVolta() {
-  digitalWrite(pinoIN1, LOW);
-  digitalWrite(pinoIN2, HIGH);
-  digitalWrite(pinoIN3, HIGH);
-  digitalWrite(pinoIN4, LOW);
+  analogWrite(pinoIN1, 0);
+  analogWrite(pinoIN2, VEL_GIRO * COMPENSACAO_ESQ);
+  analogWrite(pinoIN3, VEL_GIRO * COMPENSACAO_DIR);
+  analogWrite(pinoIN4, 0);
   delay(TEMPO_MEIA_VOLTA);
   pararMotores();
 }
 
 void freiar() {
-  // Ré por um tempo curto para cancelar a inércia
-  digitalWrite(pinoIN1, LOW);
-  digitalWrite(pinoIN2, HIGH);
-  digitalWrite(pinoIN3, LOW);
-  digitalWrite(pinoIN4, HIGH);
-  delay(150); // ajusta esse valor se precisar
+  analogWrite(pinoIN1, 0);
+  //analogWrite(pinoIN2, VEL_RE * COMPENSACAO_ESQ);
+  analogWrite(pinoIN3, 0);
+  //analogWrite(pinoIN4, VEL_RE * COMPENSACAO_DIR);
+  //delay(50);
   pararMotores();
-  delay(100);
 }
-
-// --- Sensor ---
-
-uint16_t olharEMedir(int angulo, const char* label) {
-  meuServo.write(angulo);
-  delay(500);
-
-  uint16_t distancia = sensor.readRangeSingleMillimeters();
-
-  if (sensor.timeoutOccurred()) {
-    Serial.printf("  [%s] ERRO: Timeout!\n", label);
-    return 9999;
-  }
-
-  Serial.printf("  [%s] %u mm %s\n",
-    label,
-    distancia,
-    distancia > DISTANCIA_LIMITE ? "→ LIVRE" : "→ PAREDE"
-  );
-  return distancia;
-}
-
-// -----------------------------------------------------------
 
 void setup() {
   Serial.begin(115200);
+  delay(2000); // Pausa para o USB estabilizar
+  
+  Serial.println("\n--- Iniciando Setup do timBot (Versão 3 Sensores) ---");
 
+  // Configura Pinos Motores
   pinMode(pinoIN1, OUTPUT);
   pinMode(pinoIN2, OUTPUT);
   pinMode(pinoIN3, OUTPUT);
   pinMode(pinoIN4, OUTPUT);
   pararMotores();
 
-  ESP32PWM::allocateTimer(0);
-  ESP32PWM::allocateTimer(1);
-  ESP32PWM::allocateTimer(2);
-  ESP32PWM::allocateTimer(3);
-  meuServo.setPeriodHertz(50);
-  meuServo.attach(pinoServo, 500, 2400);
+  // Configura Pinos XSHUT e reseta sensores
+  pinMode(XSHUT_ESQ, OUTPUT);
+  pinMode(XSHUT_FRENTE, OUTPUT);
+  pinMode(XSHUT_DIR, OUTPUT);
+  
+  digitalWrite(XSHUT_ESQ, LOW);
+  digitalWrite(XSHUT_FRENTE, LOW);
+  digitalWrite(XSHUT_DIR, LOW);
+  delay(50);
 
-  Wire.begin(32, 33);
-  sensor.init();
-  sensor.setTimeout(500);
+  // Inicia I2C
+  Wire.begin(SDA_PIN, SCL_PIN);
 
-  Serial.println("--- timBot iniciado! ---");
-  meuServo.write(ANGULO_CENTRO);
+  // Inicializa Sensor Esquerdo (0x30)
+  digitalWrite(XSHUT_ESQ, HIGH);
+  delay(50);
+  sensorEsq.init();
+  sensorEsq.setTimeout(500);
+  sensorEsq.setAddress(0x30);
+
+  // Inicializa Sensor Frente (0x31)
+  digitalWrite(XSHUT_FRENTE, HIGH);
+  delay(50);
+  sensorFrente.init();
+  sensorFrente.setTimeout(500);
+  sensorFrente.setAddress(0x31);
+
+  // Inicializa Sensor Direito (0x29 - Padrão)
+  digitalWrite(XSHUT_DIR, HIGH);
+  delay(50);
+  sensorDir.init();
+  sensorDir.setTimeout(500);
+
+  // Inicia leituras contínuas 
+  sensorEsq.startContinuous();
+  sensorFrente.startContinuous();
+  sensorDir.startContinuous();
+
+  Serial.println("--- Setup Concluído. Entrando no labirinto! ---");
   delay(1000);
 }
 
+
 void loop() {
-  meuServo.write(ANGULO_CENTRO);
-  //delay(300);
+  int distEsq = sensorEsq.readRangeContinuousMillimeters();
+  int distFrente = sensorFrente.readRangeContinuousMillimeters();
+  int distDir = sensorDir.readRangeContinuousMillimeters();
 
-  uint16_t distFrente = sensor.readRangeSingleMillimeters();
+  Serial.printf("Esq: %d | Frente: %d | Dir: %d\n", distEsq, distFrente, distDir);
 
-  if (sensor.timeoutOccurred()) {
-    pararMotores();
-    delay(200);
-    return;
-  }
-
-  Serial.printf("  [FRENTE] %u mm\n", distFrente);
-
-  if (distFrente > DISTANCIA_LIMITE) {
-    moverFrente();
-    delay(10);
-    return;
-  }
-
-  // --- FRENTE BLOQUEADA ---
-  freiar();
-
-  uint16_t distDireita = olharEMedir(ANGULO_DIREITA, "DIREITA");
-  meuServo.write(ANGULO_CENTRO);
-  delay(300);
-
-  if (distDireita > DISTANCIA_LIMITE) {
-    Serial.println("=> Virando à direita!\n");
-    girarDireita();
-    return;
-  }
-
-  uint16_t distEsquerda = olharEMedir(ANGULO_ESQUERDA, "ESQUERDA");
-  meuServo.write(ANGULO_CENTRO);
-  delay(300);
-
-  if (distEsquerda > DISTANCIA_LIMITE) {
-    Serial.println("=> Virando à esquerda!\n");
-    girarEsquerda();
-  } else {
-    Serial.println("=> Beco sem saída! Dando meia-volta!\n");
+  if(distEsq < DISTANCIA_LIMITE && distDir < DISTANCIA_LIMITE && distFrente < DISTANCIA_LIMITE) {
+    freiar();
     darMeiaVolta();
+    delay(100); 
+    return;
   }
+  else if(distDir <  DISTANCIA_MINIMA_LATERAL) {
+    freiar();
+    moverTrasDireitaPoquinho();
+    delay(100); 
+    return;
+  }
+  else if(distEsq <  DISTANCIA_MINIMA_LATERAL) {
+    freiar();
+    moverTrasEsquerdaPoquinho();
+    delay(100); 
+    return;
+  }
+  else if(distDir > DISTANCIA_LIMITE_DIR) {
+    moverFrentePoquinho();
+    freiar();
+    girarEsquerda();
+    delay(100); 
+    return;
+  }
+  else if (distFrente < DISTANCIA_FREIO) {
+    freiar();
+    if (distEsq > distDir) {
+      moverFrentePoquinho();
+      girarDireita();
+    } else {
+      moverFrentePoquinho();
+      girarEsquerda();
+    }
+    delay(100); 
+    return;
+  }
+
+  moverFrente();
+  delay(100); 
 }
+
+
