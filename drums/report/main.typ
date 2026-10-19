@@ -58,6 +58,8 @@
   fonte: "Times New Roman",
 )
 
+
+
 #set page(margin: (top: 3.5cm, bottom: 3.5cm, left: 3cm, right: 2cm))
 
 // ============================================================================
@@ -74,26 +76,24 @@
 // Não é preciso repetir título, autor, instituição, etc.
 
 #capa()
-#folha-rosto()
+//#folha-rosto()
 // ============================================================================
 // ELEMENTOS TEXTUAIS
 // ============================================================================
 
 #resumo[
     O presente trabalho propõe um modelo de desenvolvimento de uma bateria 
-    eletrônica de baixo custo baseada em sistemas embarcados, voltada à 
-    prática de instrumentos musicais com capacidade de restringir sua 
-    propagação sonora ao ambiente externo. O sistema possui dois modos de 
-    funcionamento: O *Modo Jogo*, com uma abordagem gamificada que integra a 
-    experiência ao jogo *Clone Hero* e o *Modo Instrumento*, que é dedicado
+    eletrônica de baixo custo baseada no microcontrolador *ESP32* e sensores piezoelétricos, voltada para a 
+    prática musical silenciosa. A iniciativa faz parte do ProtoPET, projeto do PET-CC UFRN (Programa de Educação Tutorial do curso de Ciência da Computação) orientado pelo Prof. Dr. Umberto Souza da Costa, focado no aprofundamento técnico em Sistemas Embarcados. O sistema oferece dois modos de 
+    funcionamento: o *Modo Jogo*, com uma abordagem gamificada que integra a 
+    experiência ao jogo *Clone Hero*, e o *Modo Instrumento*, que é dedicado 
     a proporcionar uma prática musical mais fiel à realidade, onde a 
-    intensidade da interação com os instrumento faz diferença na magnitude 
-    do som, o. Ambos tem como ciruito base um microcontrolador *ESP32* que 
-    utiliza sensores piezoelétricos para detecção das batidas realizadas
+    intensidade da interação com os instrumentos faz diferença na dinâmica do som. Ambos têm como circuito-base um microcontrolador *ESP32* que 
+    utiliza sensores piezoelétricos para detecção das batidas realizadas 
     pelo usuário. O projeto busca demonstrar a viabilidade da construção 
     de instrumentos musicais eletrônicos de baixo custo utilizando tecnologias 
     embarcadas acessíveis. O projeto está disponível 
-    #link("https://github.com/PETCC-UFRN/ProtoPET/tree/main/drums")[*nesse*] 
+    #link("https://github.com/PETCC-UFRN/ProtoPET/tree/main/drums")[*neste*] 
     repositório.
 ]
 = Introdução
@@ -113,9 +113,7 @@ execução musical com menor impacto acústico ao ambiente externo.
 Nesse contexto, as baterias eletrônicas destacam-se como uma solução amplamente 
 empregada para esse problema, possibilitando ao usuário praticar o instrumento 
 utilizando fones de ouvido e reduzindo significativamente a propagação sonora no 
-ambiente. Entretanto, equipamentos comerciais dessa categoria frequentemente 
-apresentam custos elevados, dificultando sua aquisição por estudantes e músicos 
-iniciantes.
+ambiente. Entretanto, equipamentos comerciais de entrada com estrutura física (rack) e conectividade USB/MIDI apresentam custos que partem de aproximadamente R\$ 1.400,00 no comércio nacional, dificultando sua aquisição por estudantes e músicos iniciantes.
 
 Dessa forma, o presente trabalho propõe o desenvolvimento de um protótipo de bateria 
 eletrônica de baixo custo baseado em sistemas embarcados, utilizando sensores 
@@ -195,9 +193,9 @@ estejam configurados no mesmo _baud rate_(velocidade em bits por segundo).
 No que diz respeito à parte física do protótipo, ou seja, o _Hardware_ os conhecimentos 
 fundamentais para nortear o projeto foram os seguintes:
 
-== Sensor piezzoelétrico
+=== Sensor piezoelétrico
 
-O efeito piezzoelétrico é uma forma de geração de energia que converte pressão
+O efeito piezoelétrico é uma forma de geração de energia que converte pressão
 mecânica em eletricidade, tal fenômeno ocorre em materiais interagindo com
 específicos, como cerâmicas piezoelétricas 
 #citar("Lima; Santos; Duarte", "2024"). Através dele, o sensor 
@@ -207,10 +205,10 @@ aplicada. E tal comportamento pode ser aproveitado como entrada da bateria
 a fim de gerar um sinal que posteriormente virará um som de intensidade 
 correspondente.
 
-== Microcontrolador
+=== Microcontrolador
 
 Um Microcontrolador se trata de um computador de pequeno porte contido em 
-um único circuito integrado, consistendo em uma Unidade de Processamento 
+um único circuito integrado, consistindo em uma Unidade de Processamento 
 Central simples, memória temporária e permanente, além de  alguns 
 dispositivos periféricos #citar("Wilmshurst", "2007"). Este 
 foi utilizado no projeto como receptor, normalizador e processador dos sinais 
@@ -335,11 +333,11 @@ para processar os, no máximo, 8 _pads_ possíveis em uma bateria, conforme deta
 Conforme mostrado anteriormente, o sinal recebido tem uma natureza não linear, e 
 isso afeta diretamente a forma na qual o processamento ocorre. A leitura de cada _pad_
 ocorre durante um intervalo de 12ms, durante esse tempo a porta lê todos os valores 
-recebidos. Note que esse intervalo se mantem dentro da latência estipulada, pois 
+recebidos. Note que esse intervalo se mantém dentro da latência estipulada, pois 
 supondo todos os _pads_ possíveis em uma bateria(até 8) temos que $8 * 12 < 300$.
 
 Entretanto, o sinal apenas é considerado caso esse esteja no intervalo de 
-valores teto e piso definidos para aquele _pad_, o valor mínimo é necessario para não 
+valores teto e piso definidos para aquele _pad_, o valor mínimo é necessário para não 
 atrasar o processamento considerando ruídos no cálculo, e o valor máximo é necessário 
 para proteger o sistema de possíveis falhas. Dentre todos os valores lidos que estão 
 nesse intervalo, apenas o maior é considerado, sendo este a intensidade da batida.
@@ -402,7 +400,7 @@ Cada componente continha um sensor piezoelétrico, um conector TS de 1/4 polegad
   caption: [Tambor por dentro],
 ),
 )
-#fonte[Elaborado pelo autor (2026).]
+#fonte[Elaborado pelos Autores (2026).]
 
 #grid(
   columns: (1fr, 1.8fr),
@@ -417,13 +415,13 @@ Cada componente continha um sensor piezoelétrico, um conector TS de 1/4 polegad
   caption: [Ligação do Prato],
 ),
 )
-#fonte[Elaborado pelo autor (2026).]
+#fonte[Elaborado pelos Autores (2026).]
 
 #figure(
   image("images/pedal.png", width: 80%),
   caption: [Pedal da bateria],
 )
-#fonte[Elaborado pelo autor (2026).]
+#fonte[Elaborado pelos Autores (2026).]
 
 O protótipo final foi composto por 4 Tambores, 3 Pratos e 1 Pedal. Todas as peças foram conectadas a um componente adicional que guardava o microcontrolador _ESP32_, e por fim, organizadas em formato de bateria utilizando uma estrutura de tubos PVC. 
 
@@ -431,19 +429,22 @@ O protótipo final foi composto por 4 Tambores, 3 Pratos e 1 Pedal. Todas as pe�
   image("images/pote_com_ESP32.jpeg", width: 80%),
   caption: [Pote com _ESP32_],
 )
-#fonte[Elaborado pelo autor (2026).]
+#fonte[Elaborado pelos Autores (2026).]
 
 #figure(
   image("images/bateria.jpeg", width: 80%),
   caption: [Bateria inteira],
 )
-#fonte[Elaborado pelo autor (2026).]
+#fonte[Elaborado pelos Autores (2026).]
 
 Ao término da implementação, o protótipo foi apresentado na Mostra de Profissões da UFRN (2026) no estande do curso de Bacharelado em Ciência da Computação. A bateria impactou diretamente no estande, ajudando a obter cerca de 160 visitantes registrados nos 2 dias de evento.
 
-Por fim, verificou-se que a maioria dos requisitos estabelecidos foi atendida integralmente ou parcialmente conforme detalhado a seguir.
+== Avaliação dos Requisitos
 
-#heading(numbering: none, level: 23)[Requisitos funcionais:]
+Após a validação prática do protótipo, avaliou-se o cumprimento das especificações previamente levantadas. Do total de 7 requisitos definidos (3 funcionais e 4 não-funcionais), verificou-se que **5 foram atendidos integralmente** e **2 foram atendidos parcialmente**, conforme detalhado a seguir.
+
+=== Requisitos Funcionais (3 de 3 atendidos integralmente)
+
 \
 - *Compatibilidade com MIDI (RF1) — Atendido integralmente:* a compatibilidade da biblioteca
   `mido` facilitou a implementação da comunicação MIDI, permitindo
@@ -458,7 +459,7 @@ Por fim, verificou-se que a maioria dos requisitos estabelecidos foi atendida in
   máximo definidos para cada sensor. Dessa forma, a intensidade do
   som reproduzido corresponde à intensidade do impacto detectado.
   
-#heading(numbering: none, level: 3)[Requisitos não-funcionais:]
+=== Requisitos Não-Funcionais (2 de 4 atendidos integralmente / 2 atendidos parcialmente)
 
 - *Baixo custo (RNF1) — Atendido parcialmente:* o custo total estimado para a
   etapa de construção da bateria foi de R\$ 410,00 distribuído da seguinte
@@ -492,10 +493,27 @@ Outro ponto de melhoria seria substituir as ligações via TS de 1/4 polegada po
   comprometer o atendimento ao requisito de baixo custo (RNF1).
 \
 
-Diante dos resultados obtidos, considera-se que o projeto foi
-executado de maneira satisfatória, atendendo à maior parte dos
-requisitos estabelecidos e cumprindo seu propósito educacional de
-proporcionar experiência prática na área de Sistemas Embarcados.
+Diante dos resultados obtidos, conclui-se que o projeto atingiu 100% dos requisitos funcionais e atendeu plenamente à proposta de viabilizar um sistema embarcado de baixo custo com fins educacionais e de prática musical.
+
+= Considerações Finais
+
+O desenvolvimento do Drummies, no âmbito do ProtoPET, demonstrou a viabilidade de uma
+bateria eletrônica de baixo custo baseada em sistemas embarcados. Ao utilizar
+microcontroladores e componentes de fácil acesso, o projeto
+resultou em um protótipo funcional, capaz de atender à prática musical silenciosa e de
+permitir a personalização do uso (onde neste artigo utilizamos 2 modos).
+
+Dessa forma, o Drummies se mostra útil como alternativa acessível para estudantes e
+músicos iniciantes que enfrentam restrições orçamentárias, de espaço ou de ruído, além de servir como
+base para melhorias futuras, como a redução do custo das conexões, uma estrutura mais
+modular e a substituição do computador auxiliar por um dispositivo mais acessível, como
+um celular.
+
+Por fim, o projeto contribuiu para a formação dos petianos ao consolidar, na prática,
+conceitos de Sistemas Embarcados.
+A apresentação na Mostra de Profissões da UFRN (2026) evidenciou ainda seu potencial
+como ferramenta de divulgação científica, atraindo e engajando os visitantes de maneira
+interativa e aproximando os estudantes do Ensino Médio da Ciência da Computação.
 
 #bibliography(
   "referencias.bib",
