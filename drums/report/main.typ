@@ -22,7 +22,6 @@
 #show: dados.with(
   // --- Dados básicos do trabalho ---
   titulo: "Drummies: Desenvolvimento de uma bateria eletrônica embarcada de baixo custo",
-  // DICA: Se não tiver subtítulo, remova ou comente a linha abaixo
 
   // --- Dados do autor ---
   autor: "Gabriel Carvalho Pereira Silva
@@ -32,22 +31,16 @@
   instituicao: "Universidade Federal do Rio Grande do Norte",
   faculdade: "Departamento de Informática e Matemática Aplicada",
   programa: "PET de Ciência da Computação",
-  // DICA para graduação:
-  //   programa: "Curso de Bacharelado em Matemática",
 
   // --- Local e data ---
   local: "Natal",
   ano: 2026,
 
   // --- Natureza do trabalho ---
-  // Para DISSERTAÇÃO de mestrado:
   natureza: "Relatório técnico referente ao ProtoPET, uma iniciativa do PET-CC UFRN(Programa de Educação Tutorial de Ciência da Computação) que visa um aprofundamento técnico dos petianos na área de Sistemas Embarcados.",
-
 
   // --- Orientação ---
   orientador: "Prof. Dr. Umberto Souza da Costa",
-  // DICA: Se tiver coorientador, descomente:
-  // coorientador: "Prof. Dr. Nome do Coorientador",
 
   // --- Palavras-chave ---
   palavras-chave: ("Sistemas Embarcados", "Instrumentos Musicais", "Baixo-Custo"),
@@ -58,28 +51,35 @@
   fonte: "Times New Roman",
 )
 
+// Sobrescreve a formatação dos títulos definida em abntyp/src/core/setup.typ:
+// seção secundária em negrito e seção terciária em negrito e itálico.
+#show heading.where(level: 2): it => {
+  v(1.5em)
+  text(weight: "bold", size: 12pt)[
+    #if it.numbering != none {
+      counter(heading).display()
+      h(0.5em)
+    }
+    #upper(it.body)
+  ]
+  v(1.5em)
+}
 
+#show heading.where(level: 3): it => {
+  v(1.5em)
+  text(weight: "bold", style: "italic", size: 12pt)[
+    #if it.numbering != none {
+      counter(heading).display()
+      h(0.5em)
+    }
+    #it.body
+  ]
+  v(1.5em)
+}
 
 #set page(margin: (top: 3.5cm, bottom: 3.5cm, left: 3cm, right: 2cm))
 
-// ============================================================================
-// PARTE 2: CAPA E FOLHA DE ROSTO
-// ============================================================================
-//
-// A capa e a folha de rosto são elementos obrigatórios (NBR 14724:2024).
-// Elas contêm informações essenciais sobre o trabalho.
-
-// ----------------------------------------------------------------------------
-// CAPA E FOLHA DE ROSTO
-// ----------------------------------------------------------------------------
-// Todos os dados vêm automaticamente do dados() acima.
-// Não é preciso repetir título, autor, instituição, etc.
-
 #capa()
-//#folha-rosto()
-// ============================================================================
-// ELEMENTOS TEXTUAIS
-// ============================================================================
 
 #resumo[
     O presente trabalho propõe um modelo de desenvolvimento de uma bateria 
@@ -96,6 +96,7 @@
     #link("https://github.com/PETCC-UFRN/ProtoPET/tree/main/drums")[*neste*] 
     repositório.
 ]
+
 = Introdução
 
 A prática de instrumentos musicais está intrinsecamente associada à produção sonora, 
@@ -147,82 +148,13 @@ evidenciar a aplicação de conhecimentos de eletrônica, programação e proces
 sinais na construção de um sistema funcional, contribuindo para a articulação entre
 os fundamentos teóricos e sua aplicação prática.
 
-= Fundamentação Teórica
-
-Os conhecimentos mobilizados ao longo do desenvolvimento do projeto podem ser 
-organizados, de maneira geral, em duas grandes categorias complementares: Software e 
-Hardware.
-
-== Software
-
-Os conhecimentos relacionados a Software abrangem os aspectos lógicos e computacionais
-do projeto, incluindo o desenvolvimento de algoritmos, a implementação do código e o
-processamento dos dados, ou seja, os elementos responsáveis por definir o comportamento
-do sistema, independentemente de sua materialização física.
-
-=== Requisitos
-
- Requisitos funcionais descrevem os serviços que o sistema deve fornecer, suas respostas
-a entradas específicas e os comportamentos esperados em determinadas situações
-#citar("Sommerville", "2016"). Já os requisitos não-funcionais estabelecem 
-restrições e critérios de qualidade que não dizem respeito diretamente às funcionalidades
-do sistema, como tempo de resposta, uso de memória e segurança. Ambos são fundamentais na
-Engenharia de Software, pois orientam o desenvolvimento e estabelecem metas a serem alcançadas
-durante a implementação do projeto.
-
-=== MIDI
-
-O MIDI (_Musical Instrument Digital Interface_) é um padrão amplamente utilizado na
-indústria musical para estabelecer a comunicação entre instrumentos eletrônicos,
-controladores e softwares de produção musical. Por meio dele, são transmitidos dados
-que descrevem eventos musicais, como notas, altura sonora (pitch), velocidade de 
-acionamento e outros mais. Ao longo do projeto, esse recurso foi empregado no *Modo 
-Instrumento*, visto que maximiza a compatibilidade do _hardware_ desenvolvido 
-com os padrões adotados pelos principais softwares de produção musical.
-
-=== UART
-
-O UART (_Universal Asynchronous Receiver/Transmitter_) se trata de um protocolo usado 
-a nível de _hardware_ para a comunicação entre dois atores, um que transmite e outro 
-que recebe dados. Não tendo esses estáticos, e podendo alternar seus papéis. Basta que 
-haja um linha de transmissão(TX) e uma linha de recebimento(RX), e ambos os dispositivos 
-estejam configurados no mesmo _baud rate_(velocidade em bits por segundo).
-
-== Hardware
-
-No que diz respeito à parte física do protótipo, ou seja, o _Hardware_ os conhecimentos 
-fundamentais para nortear o projeto foram os seguintes:
-
-=== Sensor piezoelétrico
-
-O efeito piezoelétrico é uma forma de geração de energia que converte pressão
-mecânica em eletricidade, tal fenômeno ocorre em materiais interagindo com
-específicos, como cerâmicas piezoelétricas 
-#citar("Lima; Santos; Duarte", "2024"). Através dele, o sensor 
-piezoelétrico combina latão e Zirconato-Titanato de Chumbo(PZT) para que 
-impacto mecânico seja convertido em um pulso elétrico proporcional à força
-aplicada. E tal comportamento pode ser aproveitado como entrada da bateria 
-a fim de gerar um sinal que posteriormente virará um som de intensidade 
-correspondente.
-
-=== Microcontrolador
-
-Um Microcontrolador se trata de um computador de pequeno porte contido em 
-um único circuito integrado, consistindo em uma Unidade de Processamento 
-Central simples, memória temporária e permanente, além de  alguns 
-dispositivos periféricos #citar("Wilmshurst", "2007"). Este 
-foi utilizado no projeto como receptor, normalizador e processador dos sinais 
-recebidos, e posteriormente envia estes para que outra máquina possa interpretá-los.
-
-
 = Metodologia
 
-Para nortear o desenvolvimento do protótipo, o levantamento de requisitos foi uma
-etapa fundamental para guiar as tomadas de decisão ao longo do projeto.
+Para nortear o desenvolvimento do protótipo, o levantamento e a especificação de requisitos foi uma etapa fundamental para guiar as tomadas de decisão ao longo do projeto. Na Engenharia de Software, requisitos funcionais descrevem os serviços que o sistema deve fornecer, suas respostas a entradas específicas e os comportamentos esperados em determinadas situações #citar("Sommerville", "2016"). Por sua vez, os requisitos não-funcionais estabelecem restrições e critérios de qualidade que não dizem respeito diretamente às funcionalidades do sistema, como tempo de resposta, uso de memória e segurança, orientando o desenvolvimento e estabelecendo metas a serem alcançadas durante a implementação.
 
 == Requisitos Funcionais
 
-+ *Compatibilidade com MIDI: (RF1)* Visando maximizar a compatibilidade com os _softwares_ de produção musical que são mais tradicionais no mercado, foi imposto que a entrada do sistema deve seguir o padrão . Dessa forma, o funcionamento do projeto não fica restrito ao _software_ que posteriormente será proposto.
++ *Compatibilidade com MIDI: (RF1)* Visando maximizar a compatibilidade com os _softwares_ de produção musical que são mais tradicionais no mercado, foi imposto que a entrada do sistema deve seguir o padrão. Dessa forma, o funcionamento do projeto não fica restrito ao _software_ que posteriormente será proposto.
 
 + *Transmissão de som via interface de áudio de escolha: (RF2)* Diferentemente dos instrumentos acústicos, um diferencial dos instrumentos de natureza digital é a possibilidade de propagação do som de maneira mais seletiva. Sendo assim, uma das restrições impostas para o produto final é ser compatível com interfaces capazes de transmitir áudio, tais como P2, P3 e _Bluetooth_.
 
@@ -238,7 +170,6 @@ etapa fundamental para guiar as tomadas de decisão ao longo do projeto.
 
 + *Modularidade: (RNF4)* O protótipo deve apresentar uma estrutura modular, com componentes interconectados por cabos removíveis, de modo a facilitar sua montagem e desmontagem. Essa característica contribui para simplificar o armazenamento, o transporte e a organização do equipamento, complementando o requisito de redução do espaço físico ocupado.
 
-
 == Especificação
 
 O funcionamento da bateria eletrônica pode ser dividido em três módulos principais: 
@@ -248,13 +179,9 @@ complexidade de cada componente e tornando o sistema mais modular.
 
 === Aquisição de sinais
 
-Inicialmente, cada _pad_ da bateria é equipado com um sensor piezoelétrico responsável 
-por converter o impacto mecânico em um pulso elétrico cuja amplitude é proporcional à 
-intensidade da batida. Esses sinais são encaminhados para um microcontrolador ESP32, 
-que realiza a leitura das entradas analógicas, aplica os filtros necessários para 
-eliminar ruídos e múltiplas detecções provenientes de uma única vibração, além de 
-normalizar os valores para a faixa utilizada pelo padrão MIDI. A aquisição dos sinais 
-ocorre através de um algoritmo de scan descrito no pseudocódigo abaixo:
+A captura dos impactos gerados pelas baquetas inicia-se nos _pads_ da bateria, onde cada um é equipado com um sensor piezoelétrico. Esse componente combina latão e Zirconato-Titanato de Chumbo (PZT) para aproveitar o efeito piezoelétrico — fenômeno que converte pressão mecânica em eletricidade em determinados materiais, como cerâmicas piezoelétricas #citar("Lima; Santos; Duarte", "2024"). Dessa forma, o impacto mecânico exercido na superfície do _pad_ é transformado em um pulso elétrico proporcional à força aplicada.
+
+Os impulsos elétricos gerados pelos sensores são encaminhados para um microcontrolador — um computador de pequeno porte integrado em um único circuito, composto por uma Unidade Central de Processamento simples, memória temporária e permanente, além de periféricos de entrada e saída #citar("Wilmshurst", "2007"). No protótipo, utilizou-se a placa *ESP32*, atuando como receptor, normalizador e processador primário dos sinais. O microcontrolador realiza a leitura das entradas analógicas, aplica os filtros necessários para eliminar ruídos e falsas leituras decorrentes da vibração do material, e normaliza os valores para a faixa do padrão MIDI. A aquisição dos sinais ocorre através de um algoritmo de varredura (_scan_) descrito no pseudocódigo abaixo:
 
 #algorithm-figure(
   "Detecção e Transmissão de Impactos",
@@ -262,7 +189,6 @@ ocorre através de um algoritmo de scan descrito no pseudocódigo abaixo:
   {
     import algorithmic: *
   
-    
     Procedure(
       "detectarImpactos",
       (),
@@ -302,8 +228,6 @@ ocorre através de um algoritmo de scan descrito no pseudocódigo abaixo:
                     Call("transmitir", ("pacote",))
                       , "Transmite evento ao Computador"
                     )
-
-                    
                   },
                 )
               },
@@ -347,8 +271,7 @@ computador. E para isso o `min` e o `max` se fazem mais importantes ainda, pois
 estes serão os valores considerados para transformar o valor lido em um número de 
 0(`min`) a 127(`max`, teto da interface *MIDI*).
 
-Uma vez conhecido o valor, seu respectivo _pad_ associado é identificado. Com essa informação, o processo de envio para a outra máquina começa. É utilizado o protocolo *UART* para enviar os dados, sendo assim, 
-fisicamente se faz necessário que haja um *TX* e um *RX*, presente na entrada USB usada.
+Uma vez conhecido o valor, seu respectivo _pad_ associado é identificado. Com essa informação, inicia-se o processo de envio para a outra máquina. Para realizar a transmissão de dados serial a nível de _hardware_, utiliza-se o protocolo UART (_Universal Asynchronous Receiver/Transmitter_), que estabelece a comunicação assíncrona entre o microcontrolador e o computador receptor por meio de uma linha de transmissão (TX) e uma de recepção (RX) configuradas sob o mesmo _baud rate_ (velocidade em bits por segundo). Na prática, essa interface física é viabilizada pela conexão USB da placa.
 
 A formatação dos dados é feita através de pacotes binários a fim de diminuir o tempo 
 de transmissão que formatar em *ASCII*(_American Standard Code for Information Interchange_)
@@ -363,77 +286,77 @@ struct __attribute__((packed)) Packet
     uint32_t timestamp; // Horário da batida
 };
 ```
+
 === Retorno da interação
 
-No Modo Jogo, os sinais são interpretados de forma binária, desconsiderando-se a 
-intensidade do impacto. Essa abordagem é adequada ao *Clone Hero*, uma vez que a 
-jogabilidade depende da detecção das batidas, independentemente de sua intensidade. 
-Para implementar essa funcionalidade, o script `clone_hero.py` utiliza a biblioteca 
-`pyinput` para mapear os impactos detectados ao pressionamento de teclas específicas 
+No Modo Jogo, os sinais são interpretados de forma binária, desconsiderando-se a
+intensidade do impacto. Essa abordagem é adequada ao Clone Hero, uma vez que a
+jogabilidade depende da detecção das batidas, independentemente de sua intensidade.
+Para implementar essa funcionalidade, o script clone_hero.py utiliza a biblioteca
+pyinput para mapear os impactos detectados ao pressionamento de teclas específicas
 do teclado, previamente associadas às ações correspondentes no jogo.
 
-Por sua vez, o Modo Instrumento considera a intensidade dos impactos, convertendo-a em
-valores de velocidade MIDI. Essa funcionalidade é implementada pelo script `midi.py`, que
-utiliza a biblioteca `mido` para transmitir os eventos musicais por meio de uma interface MIDI
-virtual. Dessa forma, o protótipo pode ser integrado a softwares de produção musical, como o
-*Hydrogen*, utilizado durante os testes para verificar o recebimento dos eventos e sua
-associação às respectivas notas MIDI.
+Por sua vez, o Modo Instrumento é dedicado a proporcionar uma prática musical mais fiel e expressiva. Para isso, emprega-se o protocolo MIDI (Musical Instrument Digital Interface), padrão amplamente utilizado na indústria musical para estabelecer a comunicação entre instrumentos eletrônicos, controladores e softwares de produção musical. O MIDI transmite dados digitais que descrevem eventos musicais, como notas, altura sonora (pitch) e a velocidade de acionamento (intensidade da batida). A adoção desse padrão maximiza a compatibilidade do hardware desenvolvido com os softwares do mercado.
+
+Essa funcionalidade é implementada pelo script midi.py, que utiliza a biblioteca mido para transmitir os eventos por meio de uma interface MIDI virtual. Dessa forma, o protótipo pode ser integrado a softwares de produção musical, como o Hydrogen, utilizado durante os testes para verificar o recebimento dos eventos e sua associação às respectivas notas e sons de bateria.
 
 = Resultados e Discussão
 
 Para a confecção da estrutura física da bateria, foram utilizados materiais de baixo custo e fácil acesso, tais como recipientes plásticos, papelão, folhas de EVA e tubos PVC. As peças foram divididas em 3 categorias:
-- *Tambores:* formados por recipientes plásticos com tampa
-- *Pratos:* formados apenas por uma tampa de plástico
-- *Pedal:* formado com papelão estruturado
+
++ *Tambores:* Formados por recipientes plásticos com tampa.
++ *Pratos:* Formados apenas por uma tampa de plástico.
++ *Pedal:* Formado com papelão estruturado.
+
 Cada componente continha um sensor piezoelétrico, um conector TS de 1/4 polegadas e tinham sua área de impacto revestida com EVA.
 
 #grid(
-  columns: (1fr, 1.8fr),
-  gutter: 4pt, 
-  align: center + horizon,
-  figure(
-  image("images/tambor2.jpeg", width: 100%),
-  caption: [Tambor da bateria],
+columns: (1fr, 1.8fr),
+gutter: 4pt,
+align: center + horizon,
+figure(
+image("images/tambor2.jpeg", width: 100%),
+caption: [Tambor da bateria],
 ),
-  figure(
-  image("images/tambor2_aberto.jpeg", width: 100%),
-  caption: [Tambor por dentro],
+figure(
+image("images/tambor2_aberto.jpeg", width: 100%),
+caption: [Tambor por dentro],
 ),
 )
 #fonte[Elaborado pelos Autores (2026).]
 
 #grid(
-  columns: (1fr, 1.8fr),
-  gutter: 4pt, 
-  align: center + horizon,
-  figure(
-  image("images/prato.jpeg", width: 100%),
-  caption: [Prato da bateria],
+columns: (1fr, 1.8fr),
+gutter: 4pt,
+align: center + horizon,
+figure(
+image("images/prato.jpeg", width: 100%),
+caption: [Prato da bateria],
 ),
-  figure(
-  image("images/prato_ligacao.jpeg", width: 100%),
-  caption: [Ligação do Prato],
+figure(
+image("images/prato_ligacao.jpeg", width: 100%),
+caption: [Ligação do Prato],
 ),
 )
 #fonte[Elaborado pelos Autores (2026).]
 
 #figure(
-  image("images/pedal.png", width: 80%),
-  caption: [Pedal da bateria],
+image("images/pedal.png", width: 80%),
+caption: [Pedal da bateria],
 )
 #fonte[Elaborado pelos Autores (2026).]
 
-O protótipo final foi composto por 4 Tambores, 3 Pratos e 1 Pedal. Todas as peças foram conectadas a um componente adicional que guardava o microcontrolador _ESP32_, e por fim, organizadas em formato de bateria utilizando uma estrutura de tubos PVC. 
+O protótipo final foi composto por 4 Tambores, 3 Pratos e 1 Pedal. Todas as peças foram conectadas a um componente adicional que guardava o microcontrolador ESP32, e por fim, organizadas em formato de bateria utilizando uma estrutura de tubos PVC.
 
 #figure(
-  image("images/pote_com_ESP32.jpeg", width: 80%),
-  caption: [Pote com _ESP32_],
+image("images/pote_com_ESP32.jpeg", width: 80%),
+caption: [Pote com ESP32],
 )
 #fonte[Elaborado pelos Autores (2026).]
 
 #figure(
-  image("images/bateria.jpeg", width: 80%),
-  caption: [Bateria inteira],
+image("images/bateria.jpeg", width: 80%),
+caption: [Bateria inteira],
 )
 #fonte[Elaborado pelos Autores (2026).]
 
@@ -441,57 +364,58 @@ Ao término da implementação, o protótipo foi apresentado na Mostra de Profis
 
 == Avaliação dos Requisitos
 
-Após a validação prática do protótipo, avaliou-se o cumprimento das especificações previamente levantadas. Do total de 7 requisitos definidos (3 funcionais e 4 não-funcionais), verificou-se que **5 foram atendidos integralmente** e **2 foram atendidos parcialmente**, conforme detalhado a seguir.
+Após a validação prática do protótipo, avaliou-se o cumprimento das especificações previamente levantadas. Do total de 7 requisitos definidos (3 funcionais e 4 não-funcionais), verificou-se que 5 foram atendidos integralmente e 2 foram atendidos parcialmente, conforme detalhado a seguir.
 
 === Requisitos Funcionais (3 de 3 atendidos integralmente)
 
 \
-- *Compatibilidade com MIDI (RF1) — Atendido integralmente:* a compatibilidade da biblioteca
-  `mido` facilitou a implementação da comunicação MIDI, permitindo
-  atender ao requisito estabelecido.
+
+*Compatibilidade com MIDI (RF1)* — Atendido integralmente: a compatibilidade da biblioteca
+mido facilitou a implementação da comunicação MIDI, permitindo
+atender ao requisito estabelecido.
 \
-- *Transmissão de som via interface de áudio de escolha (RF2) — Atendido integralmente:* a utilização do Raspbian como
-  sistema operacional facilitou a integração dos recursos de áudio e
-  Bluetooth, cujos drivers já estavam disponíveis no ambiente.
+
+*Transmissão de som via interface de áudio de escolha (RF2)* — Atendido integralmente: a utilização do Raspbian como
+sistema operacional facilitou a integração dos recursos de áudio e
+Bluetooth, cujos drivers já estavam disponíveis no ambiente.
 \
-- *Som proporcional à intensidade da detecção (RF3) — Atendido integralmente:* os valores de cada _pad_ são
-  normalizados individualmente, considerando os limites mínimo e
-  máximo definidos para cada sensor. Dessa forma, a intensidade do
-  som reproduzido corresponde à intensidade do impacto detectado.
-  
+
+*Som proporcional à intensidade da detecção (RF3)* — Atendido integralmente: os valores de cada pad são
+normalizados individualmente, considerando os limites mínimo e
+máximo definidos para cada sensor. Dessa forma, a intensidade do
+som reproduzido corresponde à intensidade do impacto detectado.
+
 === Requisitos Não-Funcionais (2 de 4 atendidos integralmente / 2 atendidos parcialmente)
 
-- *Baixo custo (RNF1) — Atendido parcialmente:* o custo total estimado para a
-  etapa de construção da bateria foi de R\$ 410,00 distribuído da seguinte
-  forma:
-  - Estrutura de PVC: R\$ 120,00.
-  - Componentes eletrônicos: R\$ 50,00.
-  - ESP32: R\$ 40,00.
-  - Cabos e Conectores TS de 1/4 polegada:  R\$ 200,00
+*Baixo custo (RNF1)* — Atendido parcialmente: o custo total estimado para a
+etapa de construção da bateria foi de R#sym.dollar 410,00 distribuído da seguinte
+forma:
 
+- *Estrutura de PVC* $approx$ R#sym.dollar 120,00.
+- *Componentes eletrônicos* $approx$ R#sym.dollar 50,00.
+- *ESP32* $approx$ R#sym.dollar 40,00.
+- *Cabos e Conectores TS de 1/4 polegada* $approx$  R#sym.dollar 200,00.
 
-Note que o sistema necessita de um computador auxiliar para executar os softwares testados (Hydrogen e Clone Hero).  
-Um ponto de melhoria possível para o trabalho seria conseguir substituir o computador por 
-um celular para fazer o retorno da interação, visto que o grau de acessibilidade do 
+Note que o sistema necessita de um computador auxiliar para executar os softwares testados (Hydrogen e Clone Hero), sendo esse um custo implícito.
+
+Um ponto de melhoria possível para o trabalho seria conseguir substituir o computador por
+um celular para fazer o retorno da interação, visto que o grau de acessibilidade do
 dispositivo é maior.
 
 Outro ponto de melhoria seria substituir as ligações via TS de 1/4 polegada por opções de menor custo, dado que o gasto neles representou cerca de 48% do gasto total.
 
-\
+*Ocupar pouco espaço físico (RNF2)* — Atendido integralmente: a bateria ocupa uma área aproximada
+de 2 m² e apresenta altura de cerca de 1,2 m, atendendo ao objetivo
+de limitar o espaço físico necessário para sua utilização.
 
-- *Ocupar pouco espaço físico (RNF2) — Atendido integralmente:* a bateria ocupa uma área aproximada
-  de 2 m² e apresenta altura de cerca de 1,2 m, atendendo ao objetivo
-  de limitar o espaço físico necessário para sua utilização.
-\
-- *Baixa latência (RNF3) — Atendido integralmente:* conforme apresentado na Seção
-  4.1.2, a latência observada permaneceu abaixo do limite de 300 ms
-  estabelecido para o projeto.
-\
-- *Modularidade (RNF4) — Atendido parcialmente:* limitações financeiras dificultaram
-  a implementação de uma estrutura completamente modular. Além disso,
-  os custos adicionais associados a essa característica poderiam
-  comprometer o atendimento ao requisito de baixo custo (RNF1).
-\
+*Baixa latência (RNF3)* — Atendido integralmente: conforme apresentado na Seção
+3.3.2, a latência observada permaneceu abaixo do limite de 300 ms
+estabelecido para o projeto.
+
+*Modularidade (RNF4)* — Atendido parcialmente: limitações financeiras dificultaram
+a implementação de uma estrutura completamente modular. Além disso,
+os custos adicionais associados a essa característica poderiam
+comprometê o atendimento ao requisito de baixo custo (RNF1).
 
 Diante dos resultados obtidos, conclui-se que o projeto atingiu 100% dos requisitos funcionais e atendeu plenamente à proposta de viabilizar um sistema embarcado de baixo custo com fins educacionais e de prática musical.
 
@@ -516,8 +440,8 @@ como ferramenta de divulgação científica, atraindo e engajando os visitantes 
 interativa e aproximando os estudantes do Ensino Médio da Ciência da Computação.
 
 #bibliography(
-  "referencias.bib",
-  style: "associacao-brasileira-de-normas-tecnicas",
-  title: "REFERÊNCIAS",
-  full: true,
+"referencias.bib",
+style: "associacao-brasileira-de-normas-tecnicas",
+title: "REFERÊNCIAS",
+full: true,
 )
