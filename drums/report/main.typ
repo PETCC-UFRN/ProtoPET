@@ -160,6 +160,8 @@ Para nortear o desenvolvimento do protótipo, o levantamento e a especificação
 
 + *Som proporcional à intensidade da detecção: (RF3)* O sistema deve relacionar a intensidade do impacto detectado pelos sensores piezoelétricos à intensidade do som reproduzido, garantindo que diferentes intensidades de batida resultem em respostas sonoras correspondentes. Esse requisito é fundamental para proporcionar uma experiência mais próxima à execução de um instrumento acústico, especialmente no Modo Instrumento.
 
+\
+
 == Requisitos não-funcionais
 
 + *Baixo custo: (RNF1)* O projeto busca desenvolver uma bateria eletrônica funcional utilizando componentes de baixo custo e fácil aquisição. Essa abordagem visa tornar o instrumento uma alternativa acessível para estudantes, entusiastas e instituições de ensino interessados em explorar conceitos de eletrônica, Sistemas Embarcados e prática musical sem a necessidade de investir em equipamentos comerciais de alto custo.
@@ -177,11 +179,14 @@ aquisição dos sinais, processamento e retorno da interação. A arquitetura pr
 separar essas responsabilidades entre os dispositivos utilizados, reduzindo a 
 complexidade de cada componente e tornando o sistema mais modular.
 
+\
+\
+
 === Aquisição de sinais
 
 A captura dos impactos gerados pelas baquetas inicia-se nos _pads_ da bateria, onde cada um é equipado com um sensor piezoelétrico. Esse componente combina latão e Zirconato-Titanato de Chumbo (PZT) para aproveitar o efeito piezoelétrico — fenômeno que converte pressão mecânica em eletricidade em determinados materiais, como cerâmicas piezoelétricas #citar("Lima; Santos; Duarte", "2024"). Dessa forma, o impacto mecânico exercido na superfície do _pad_ é transformado em um pulso elétrico proporcional à força aplicada.
 
-Os impulsos elétricos gerados pelos sensores são encaminhados para um microcontrolador — um computador de pequeno porte integrado em um único circuito, composto por uma Unidade Central de Processamento simples, memória temporária e permanente, além de periféricos de entrada e saída #citar("Wilmshurst", "2007"). No protótipo, utilizou-se a placa *ESP32*, atuando como receptor, normalizador e processador primário dos sinais. O microcontrolador realiza a leitura das entradas analógicas, aplica os filtros necessários para eliminar ruídos e falsas leituras decorrentes da vibração do material, e normaliza os valores para a faixa do padrão MIDI. A aquisição dos sinais ocorre através de um algoritmo de varredura (_scan_) descrito no pseudocódigo abaixo:
+Os impulsos elétricos gerados pelos sensores são encaminhados para um microcontrolador — um computador de pequeno porte integrado em um único circuito, composto por uma Unidade Central de Processamento simples, memória temporária e permanente, além de periféricos de entrada e saída #citar("Wilmshurst", "2007"). No protótipo, utilizou-se a placa *ESP32*, atuando como receptor, normalizador e processador primário dos sinais. O microcontrolador realiza a leitura das entradas analógicas, aplica os filtros necessários para eliminar ruídos e falsas leituras decorrentes da vibração do material, e normaliza os valores para a faixa do padrão MIDI. A aquisição dos sinais ocorre através de um algoritmo de varredura (_scan_) descrito no pseudocódigo do Algoritmo 1:
 
 #algorithm-figure(
   "Detecção e Transmissão de Impactos",
@@ -244,7 +249,7 @@ Uma alternativa ao _ESP32_ seria usar um Módulo Conversor Analógico-Digital, v
 que nesse caso pode-se dizer que as funções do _ESP32_ estão sendo sub-utilizadas. 
 Mas, conforme definido nos requisitos, o baixo custo geralmente está associado ao uso 
 de componentes de fácil acesso. Além disso, a placa por si só tem entradas o suficiente 
-para processar os, no máximo, 8 _pads_ possíveis em uma bateria, conforme detalhado abaixo.
+para processar os, no máximo, 8 _pads_ possíveis em uma bateria, conforme detalhado na Figura 1.
 
 #figure(
   image("images/esp32_devkitC_v4_pinlayout.png", width: 100%),
@@ -366,19 +371,19 @@ Ao término da implementação, o protótipo foi apresentado na Mostra de Profis
 
 Após a validação prática do protótipo, avaliou-se o cumprimento das especificações previamente levantadas. Do total de 7 requisitos definidos (3 funcionais e 4 não-funcionais), verificou-se que 5 foram atendidos integralmente e 2 foram atendidos parcialmente, conforme detalhado a seguir.
 
-=== Requisitos Funcionais (3 de 3 atendidos integralmente)
-
 \
+\
+\
+
+=== Requisitos Funcionais (3 de 3 atendidos integralmente)
 
 *Compatibilidade com MIDI (RF1)* — Atendido integralmente: a compatibilidade da biblioteca
 mido facilitou a implementação da comunicação MIDI, permitindo
 atender ao requisito estabelecido.
-\
 
 *Transmissão de som via interface de áudio de escolha (RF2)* — Atendido integralmente: a utilização do Raspbian como
 sistema operacional facilitou a integração dos recursos de áudio e
 Bluetooth, cujos drivers já estavam disponíveis no ambiente.
-\
 
 *Som proporcional à intensidade da detecção (RF3)* — Atendido integralmente: os valores de cada pad são
 normalizados individualmente, considerando os limites mínimo e
@@ -387,7 +392,7 @@ som reproduzido corresponde à intensidade do impacto detectado.
 
 === Requisitos Não-Funcionais (2 de 4 atendidos integralmente / 2 atendidos parcialmente)
 
-*Baixo custo (RNF1)* — Atendido parcialmente: o custo total estimado para a
+*Baixo custo (RNF1)* — Atendido parcialmente: O custo total estimado para a
 etapa de construção da bateria foi de R#sym.dollar 410,00 distribuído da seguinte
 forma:
 
@@ -404,15 +409,15 @@ dispositivo é maior.
 
 Outro ponto de melhoria seria substituir as ligações via TS de 1/4 polegada por opções de menor custo, dado que o gasto neles representou cerca de 48% do gasto total.
 
-*Ocupar pouco espaço físico (RNF2)* — Atendido integralmente: a bateria ocupa uma área aproximada
-de 2 m² e apresenta altura de cerca de 1,2 m, atendendo ao objetivo
-de limitar o espaço físico necessário para sua utilização.
+Entretanto, ao comparar com as opções mais populares de _marketplaces_ como Amazon e Mercado Livre, que beiram valores entre R#sym.dollar 1100,00 e R#sym.dollar 2500,00, o protótipo se faz muito vantajoso.
 
-*Baixa latência (RNF3)* — Atendido integralmente: conforme apresentado na Seção
+*Ocupar pouco espaço físico (RNF2)* — Atendido integralmente: A estrutura da bateria ocupa um volume de 86x44x80 centímetros quando montada de forma operacional, e de 57x30x80 centímetros quando retraída. Possuindo dimensões convenientes para se armazenar em um ambiente residencial, atendendo assim o objetivo de restrição de espaço físico.
+
+*Baixa latência (RNF3)* — Atendido integralmente: Conforme apresentado na Seção
 3.3.2, a latência observada permaneceu abaixo do limite de 300 ms
 estabelecido para o projeto.
 
-*Modularidade (RNF4)* — Atendido parcialmente: limitações financeiras dificultaram
+*Modularidade (RNF4)* — Atendido parcialmente: Limitações financeiras dificultaram
 a implementação de uma estrutura completamente modular. Além disso,
 os custos adicionais associados a essa característica poderiam
 comprometê o atendimento ao requisito de baixo custo (RNF1).
