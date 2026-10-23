@@ -82,19 +82,7 @@
 #capa()
 
 #resumo[
-    O presente trabalho propõe um modelo de desenvolvimento de uma bateria 
-    eletrônica de baixo custo baseada no microcontrolador *ESP32* e sensores piezoelétricos, voltada para a 
-    prática musical silenciosa. A iniciativa faz parte do ProtoPET, projeto do PET-CC UFRN (Programa de Educação Tutorial do curso de Ciência da Computação) orientado pelo Prof. Dr. Umberto Souza da Costa, focado no aprofundamento técnico em Sistemas Embarcados. O sistema oferece dois modos de 
-    funcionamento: o *Modo Jogo*, com uma abordagem gamificada que integra a 
-    experiência ao jogo *Clone Hero*, e o *Modo Instrumento*, que é dedicado 
-    a proporcionar uma prática musical mais fiel à realidade, onde a 
-    intensidade da interação com os instrumentos faz diferença na dinâmica do som. Ambos têm como circuito-base um microcontrolador *ESP32* que 
-    utiliza sensores piezoelétricos para detecção das batidas realizadas 
-    pelo usuário. O projeto busca demonstrar a viabilidade da construção 
-    de instrumentos musicais eletrônicos de baixo custo utilizando tecnologias 
-    embarcadas acessíveis. O projeto está disponível 
-    #link("https://github.com/PETCC-UFRN/ProtoPET/tree/main/drums")[*neste*] 
-    repositório.
+O presente trabalho propõe um modelo de desenvolvimento de uma bateria eletrônica de baixo custo baseada no microcontrolador *ESP32* e sensores piezoelétricos, voltada para a prática musical silenciosa. A iniciativa faz parte do ProtoPET, projeto do PET-CC UFRN (Programa de Educação Tutorial do curso de Ciência da Computação), orientado pelo Prof. Dr. Umberto Souza da Costa, focado no aprofundamento técnico em Sistemas Embarcados. O sistema oferece dois modos de funcionamento: o *Modo Jogo*, com uma abordagem gamificada que integra a experiência ao jogo *Clone Hero*, e o *Modo Instrumento*, dedicado a proporcionar uma prática musical mais fiel à realidade, na qual a intensidade da interação com os instrumentos faz diferença na dinâmica do som. Ambos têm como circuito-base um microcontrolador *ESP32* que utiliza sensores piezoelétricos para detecção das batidas realizadas pelo usuário. Concebido para ser apresentado na Mostra de Profissões da UFRN de 2026, o protótipo impactou mais de 160 pessoas ao longo dos dois dias de evento, contribuindo para a divulgação de conhecimentos sobre Sistemas Embarcados e suas aplicações. A iniciativa busca demonstrar a viabilidade da construção de instrumentos musicais eletrônicos de baixo custo utilizando tecnologias embarcadas acessíveis. Toda a documentação está disponível #link("https://github.com/PETCC-UFRN/ProtoPET/tree/main/drums")[*neste*] repositório.
 ]
 
 = Introdução
@@ -441,7 +429,7 @@ um celular.
 Por fim, o projeto contribuiu para a formação dos petianos ao consolidar, na prática,
 conceitos de Sistemas Embarcados.
 A apresentação na Mostra de Profissões da UFRN (2026) evidenciou ainda seu potencial
-como ferramenta de divulgação científica, atraindo e engajando os visitantes de maneira
+como ferramenta de divulgação científica, atraindo e engajando mais de 160 visitantes de maneira
 interativa e aproximando os estudantes do Ensino Médio da Ciência da Computação.
 
 #bibliography(
