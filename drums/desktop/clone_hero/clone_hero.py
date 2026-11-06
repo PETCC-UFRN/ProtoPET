@@ -14,6 +14,7 @@ PAD_NOTES = {
     4: 'k',  # tom direita
     5: 'm',  # prato direito
     6: 'a',  # surdo
+    7: 'g',  # bulbo
 }
 
 keyboard = Controller()

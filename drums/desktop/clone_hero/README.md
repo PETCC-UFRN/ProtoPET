@@ -10,11 +10,11 @@ Após isso, mapeie as teclas conforme descrito em `clonehero.py`, ou seja, por p
 
 | Ação | Tecla |
 | -------- | -------- |
-| Verde | a |
-| Vermelho  | a |
-| Amarelo  | a |
-| Azul  | a |
-| Laranja  | a |
+| Verde | A |
+| Vermelho  | S |
+| Amarelo  | J |
+| Azul  | K |
+| Laranja  | G |
 
 # Setup
 
