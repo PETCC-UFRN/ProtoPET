@@ -14,7 +14,7 @@ struct __attribute__((packed)) Packet {
     uint32_t timestamp;
 };
 
-const int n = 7; // todos os pads menos o bulbo
+const int n = 8; // todos os pads menos o bulbo
 
 // altere os valores a depender de quantos pads você está utilizando
 DrumPad pads[n] = {
@@ -57,6 +57,12 @@ DrumPad pads[n] = {
     { // surdo
         27,
         500,
+        900,
+        0
+    	},
+    { // bulbo
+        12,
+        400,
         900,
         0
     	},
