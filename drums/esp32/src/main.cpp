@@ -14,31 +14,62 @@ struct __attribute__((packed)) Packet {
     uint32_t timestamp;
 };
 
-const int n = 3;
+const int n = 8; // todos os pads menos o bulbo
 
+// altere os valores a depender de quantos pads você está utilizando
 DrumPad pads[n] = {
-    {
-        2,
-        500,
-        900,
-        0
-    },
-    {
-        4,
-        500,
-        900,
-        0
-    },
-    {
+    { // chimbau
         15,
-        600,
-        850,
+        450,
+        900,
         0
-    },
+    	},
+    { // prato esquerda
+        33,
+        500,
+        900,
+        0
+    	},
+    { // caixa
+        35,
+        200,
+        900,
+        0
+    	},
+    { // tom-esquerda
+        4,
+        700,
+        900,
+        0
+    	},
+    { // tom-direita
+        32,
+        600,
+        900,
+        0
+    	},
+    { // prato direito
+        25,
+        400,
+        900,
+        0
+    	},
+    { // surdo
+        27,
+        500,
+        900,
+        0
+    	},
+    { // bulbo
+        12,
+        400,
+        900,
+        0
+    	},
 };
 
-const int scanTime = 8;         // ms procurando pico
-const int retriggerDelay = 80;  // ms
+const int scanTime = 4;         // ms procurando pico
+const int retriggerDelay = 35;  // ms
 
 void printPad(int pad, int value) {
     Serial.print("[");
